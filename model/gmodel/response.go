@@ -1,0 +1,50 @@
+/******
+** @创建时间 : 2020/8/22 10:19
+** @作者 : SongZhiBin
+******/
+package gmodel
+
+import (
+	"Happy/model/model"
+	pb "Happy/model/pmodel/user"
+	"encoding/json"
+	"go.uber.org/zap"
+)
+
+// grpc响应封装
+
+// ResponHappyrorWithMsg:自定义error状态码以及错误信息
+func ResponHappyrorWithMsg(code model.ResCode, errMsg interface{}) *pb.Response {
+	msg, _ := json.Marshal(errMsg)
+	return &pb.Response{
+		Code: int32(code),
+		Msg:  string(msg),
+	}
+}
+
+// ResponHappyror:返回已知错误类型
+func ResponHappyror(code model.ResCode) *pb.Response {
+	return &pb.Response{
+		Code: int32(code),
+		Msg:  code.Msg(),
+	}
+}
+
+// ResponseSuccess:返回成功内容
+func ResponseSuccess(data map[string]string) *pb.Response {
+	return &pb.Response{
+		Code: int32(model.CodeOk),
+		Msg:  model.CodeOk.Msg(),
+		Data: data,
+	}
+}
+
+// GinResponse:转化为gin的响应
+func GinResponse(response *pb.Response) *model.ResponseStruct {
+	zap.L().Info("Response", zap.Any("response", response))
+	return &model.ResponseStruct{
+		Code: model.ResCode(response.Code),
+		Msg:  response.Msg,
+		Data: response.Data,
+	}
+}

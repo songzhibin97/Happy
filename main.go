@@ -8,10 +8,9 @@ import (
 	"Happy/dao/redis"
 	"Happy/dao/sql"
 	"Happy/logger"
-	"Happy/router"
+	"Happy/router/grouter"
+	"Happy/router/router"
 	"Happy/settings"
-	"github.com/fvbock/endless"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -69,16 +68,7 @@ func main() {
 	}
 	defer redis.Close()
 	// 5.注册路由
-	r := router.SetUp()
-	// 6.启动服务(注册优雅关机/重启)
-	// 默认endless服务器会监听下列信号：
-	// syscall.SIGHUP，syscall.SIGUSR1，syscall.SIGUSR2，syscall.SIGINT，syscall.SIGTERM和syscall.SIGTSTP
-	// 接收到 SIGHUP 信号将触发`fork/restart` 实现优雅重启（kill -1 pid会发送SIGHUP信号）
-	// 接收到 syscall.SIGINT或syscall.SIGTERM 信号将触发优雅关机
-	// 接收到 SIGUSR2 信号将触发HammerTime
-	// SIGUSR1 和 SIGTSTP 被用来触发一些用户自定义的hook函数
-	if err := endless.ListenAndServe(":"+viper.GetString("APP.Port"), r); err != nil {
-		zap.L().Error("listen error", zap.Error(err))
-	}
-	zap.L().Debug("Server exiting")
+
+	go router.SetUp()
+	grouter.GrpcSetUp()
 }

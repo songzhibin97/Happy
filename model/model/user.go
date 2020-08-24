@@ -26,3 +26,8 @@ type User struct {
 	UID      int    `db:"user_id"`
 	Username string `db:"username"`
 }
+
+// Email:邮箱接口
+type Email struct {
+	Addr string `json:"email" binding:"required,email"`
+}

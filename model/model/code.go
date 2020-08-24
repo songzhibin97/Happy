@@ -66,6 +66,7 @@ func (r ResCode) Msg() string {
 	return ResMsg[CodeServerBusy]
 }
 
+// Err:返回对应的error信息
 func (r ResCode) Err() error {
 	errs, ok := ResMsg[r]
 	if !ok {

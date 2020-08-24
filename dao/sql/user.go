@@ -5,7 +5,7 @@
 package sql
 
 import (
-	"Happy/model"
+	"Happy/model/model"
 	"Happy/pkg/snowflake"
 	"go.uber.org/zap"
 )
@@ -42,7 +42,7 @@ func IsUserValid(user, password string) (*model.User, error) {
 }
 
 // InsertUser:插入数据库完成注册
-func InsertUser(user *model.RegisterForm) bool {
+func InsertUser(username, password string) bool {
 	// 1.构建sql语句
 	sqlString := `INSERT INTO user(user_id,username,password) VALUES(?,?,?)`
 	// 2.获取全局id
@@ -52,8 +52,8 @@ func InsertUser(user *model.RegisterForm) bool {
 		return false
 	}
 	// 获取密文的密码
-	password := GetEncrypt(user.Password)
-	_, _, err = Exec(dbInstantiate, sqlString, userId, user.UserName, password)
+	pwd := GetEncrypt(password)
+	_, _, err = Exec(dbInstantiate, sqlString, userId, username, pwd)
 	if err != nil {
 		zap.L().Error("Exec Error", zap.Error(err))
 		return false

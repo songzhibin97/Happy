@@ -1,0 +1,44 @@
+syntax = "proto3";
+package pbJwt;
+
+
+// =================== (中间件验证是否有效) ====================
+message VerificationJWTRequest {
+  string Access = 1;  // tag:validate:"required"
+}
+
+message VerificationJWTResponse {
+
+  enum StateOption{
+    NotPass = 0; // 未通过
+    Expired = 1; // 已经过期
+    ExpiredJump = 2; // 已经过期但执行跳转逻辑
+    MultiTerminalLogin = 3 ; // jwt通过但是与redis不一致
+    Pass = 4; // 通过
+  }
+  StateOption  State = 1;
+}
+
+
+// =================== (刷新JWT) ====================
+
+message VerificationRefreshJWTRequest {
+  string Access = 1;  // tag:validate:"required"
+  string Refresh = 2; // tag:validate:"required"
+}
+
+
+message Response {
+  // 响应
+  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
+  string Msg = 2; // 异常提示
+  map<string, string> Data = 3; // 携带信息
+}
+
+
+
+// 服务注册
+service JWT {
+  rpc VerificationRefreshJWT (VerificationRefreshJWTRequest) returns (Response) {}
+  rpc VerificationJWT(VerificationJWTRequest)returns(VerificationJWTResponse){}
+}

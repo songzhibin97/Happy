@@ -5,7 +5,7 @@
 package jwt
 
 import (
-	"Happy/model"
+	"Happy/model/model"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )

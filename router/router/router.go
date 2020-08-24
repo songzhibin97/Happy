@@ -5,12 +5,13 @@
 package router
 
 import (
-	"Happy/controller"
+	"Happy/controller/controller"
 	"Happy/logger"
 	"Happy/middleware"
-	"Happy/model"
+	"Happy/model/model"
 	"Happy/pkg/websocket"
 	"Happy/settings"
+	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -20,13 +21,17 @@ const (
 	AuthenticationRequire   = "AuthenticationRequire"
 )
 
+// Option:func(group *gin.RouterGroup)别名
 type Option func(group *gin.RouterGroup)
 
+// Options:sliceOption
 type Options []Option
 
+// OptionsWare:key-value存储Options
 type OptionsWare map[string]Options
 
-var OptionsWares OptionsWare
+// 声明全局变量
+var OptionsWares = make(OptionsWare)
 
 // OptionsWare封装一些方法
 // AddNoAuthenticationRequire:添加不用认证的路由
@@ -50,17 +55,27 @@ func (o *OptionsWare) AddAuthenticationRequire(options ...Option) {
 	(*o)[AuthenticationRequire] = append((*o)[AuthenticationRequire], options...)
 }
 
+// LoadAll:封装遍历增加
+func (o *OptionsWare) LoadAll(group *gin.RouterGroup, key string) {
+	for _, v := range (*o)[key] {
+		v(group)
+	}
+}
+
 // 注册路由
-func SetUp() *gin.Engine {
+func SetUp() {
+	controller.Init()
+	// 如果使用共存需要返回 *gin.Engine
 	if settings.GetString("APP.Mode") == "release" {
 		// 发布版本
 		gin.SetMode(gin.ReleaseMode)
 	}
-	// 注册validator错误翻译器
-	err := controller.InitTrans(settings.GetString("APP.Language"))
-	if err != nil {
-		zap.L().Error("controller.InitTrans Error", zap.Error(err))
-	}
+	// 避免重复注册翻译器
+	//// 注册validator错误翻译器
+	//err := controller.InitTrans(settings.GetString("APP.Language"))
+	//if err != nil {
+	//	zap.L().Error("controller.InitTrans Error", zap.Error(err))
+	//}
 	r := gin.New()
 	// 注册中间件
 	r.Use(logger.GinLogger(zap.L()), logger.GinRecovery(zap.L(), true))
@@ -69,32 +84,27 @@ func SetUp() *gin.Engine {
 	// 存放不需要验证身份的路由
 	nar := r.Group("/")
 	{
-		// 轮询开始添加
-		for _, v := range OptionsWares[NoAuthenticationRequire] {
-			v(nar)
-		}
+		OptionsWares.LoadAll(nar, NoAuthenticationRequire)
 	}
 	// 存放需要验证身份的路由
 	ar := r.Group("/")
 	ar.Use(middleware.VerificationJWT)
-	if settings.GetString("JWT.Mode") == "refresh" {
-		ar.POST("refresh", middleware.VerificationRefreshJWT)
-	}
 	{
-		// 轮询开始添加
-		for _, v := range OptionsWares[AuthenticationRequire] {
-			v(ar)
-		}
+		OptionsWares.LoadAll(ar, AuthenticationRequire)
 	}
 	r.NoRoute(func(c *gin.Context) {
 		model.ResponseSuccess(c, gin.H{})
 	})
-	return r
+	defer controller.CloseConn()
+	if err := endless.ListenAndServe(":"+settings.GetString("APP.Port"), r); err != nil {
+		zap.L().Error("listen error", zap.Error(err))
+	}
+	zap.L().Debug("Server exiting")
+	//return r
 }
 
-// 初始化optionWare
+// InitOptionsWare:初始化optionWare
 func InitOptionsWare() {
-	OptionsWares = make(map[string]Options)
 	OptionsWares[NoAuthenticationRequire] = make(Options, 0)
 	OptionsWares[AuthenticationRequire] = make(Options, 0)
 	// 加入登录注册
@@ -107,6 +117,9 @@ func InitOptionsWare() {
 // internalAdd:加入注册登录
 func internalAdd() {
 	OptionsWares.AddNoAuthenticationRequire(Ws, SignUp, Login, GetVerificationCode)
+	if settings.GetString("JWT.Mode") == "refresh" {
+		OptionsWares.AddNoAuthenticationRequire(Refresh)
+	}
 }
 
 // OtherApp:其他加入
@@ -114,8 +127,16 @@ func OtherApp() {
 	OptionsWares.AddAuthenticationRequire(Ping)
 }
 
+// =========== function ==========
+
+// Ws:websocket
 func Ws(e *gin.RouterGroup) {
 	e.GET("WS", websocket.WsPage)
+}
+
+// Refresh:刷新路由
+func Refresh(e *gin.RouterGroup) {
+	e.POST("refresh", middleware.VerificationRefreshJWT)
 }
 
 // SignUp:注册
