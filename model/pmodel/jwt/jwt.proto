@@ -17,6 +17,7 @@ message VerificationJWTResponse {
     Pass = 4; // 通过
   }
   StateOption  State = 1;
+  int64  Uid = 2;
 }
 
 

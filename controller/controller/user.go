@@ -21,7 +21,7 @@ var GrpcConn *grpc.ClientConn
 
 // 回收资源
 func CloseConn() {
-	GrpcConn.Close()
+	_ = GrpcConn.Close()
 }
 
 // Init:初始化grpc连接

@@ -73,7 +73,7 @@ func (j *JwtServer) VerificationJWT(ctx context.Context, request *pb.Verificatio
 	// 从redis获取token判断是否一致
 	if !redis.GetToken(int64(auth.Uid), request.Access) {
 		return &pb.VerificationJWTResponse{State: pb.VerificationJWTResponse_MultiTerminalLogin}, nil
-
 	}
-	return &pb.VerificationJWTResponse{State: pb.VerificationJWTResponse_Pass}, nil
+	// 上下文存入
+	return &pb.VerificationJWTResponse{State: pb.VerificationJWTResponse_Pass, Uid: int64(auth.Uid)}, nil
 }

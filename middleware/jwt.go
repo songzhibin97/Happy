@@ -63,6 +63,8 @@ func VerificationJWT(c *gin.Context) {
 		c.Abort()
 		return
 	case pbJwt.VerificationJWTResponse_Pass:
+		// 上下文存入
+		c.Set(ConTextUserID, r.Uid)
 		c.Next()
 	}
 }

@@ -45,7 +45,6 @@ func (o *OptionsWare) AddNoAuthenticationRequire(options ...Option) {
 }
 
 // AddAuthenticationRequire:添加需要认证的路由
-
 func (o *OptionsWare) AddAuthenticationRequire(options ...Option) {
 	// 1.判断 NoAuthenticationRequire 是否初始化
 	_, ok := (*o)[AuthenticationRequire]

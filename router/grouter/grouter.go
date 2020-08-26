@@ -6,9 +6,17 @@ package grouter
 
 import (
 	"Happy/controller/gcontroller"
+	"Happy/middleware"
 	pb2 "Happy/model/pmodel/jwt"
 	pb "Happy/model/pmodel/user"
 	"Happy/settings"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -19,6 +27,11 @@ import (
 	"syscall"
 )
 
+const (
+	NoAuthenticationRequire = "NoAuthenticationRequire" // 不需要认证
+	AuthenticationRequire   = "AuthenticationRequire"   // 需要认证
+)
+
 // :注册服务分块
 
 // GrpcOption:func(server *grpc.Server)别名
@@ -27,16 +40,35 @@ type GrpcOption func(server *grpc.Server)
 // GrpcOptions:sliceGrpcOption
 type GrpcOptions []GrpcOption
 
-var GrpcOptionsWares = make(GrpcOptions, 0)
+// 新增分类
+type GrpcOptionsWare map[string]GrpcOptions
 
-// AddGrpcOptionsWares:添加
-func (g *GrpcOptions) AddGrpcOptionsWares(grpcOptions ...GrpcOption) {
-	*g = append(*g, grpcOptions...)
+// 更改类型
+var GrpcOptionsWares = make(GrpcOptionsWare)
+
+// AddNoAuthenticationRequire:添加不用认证的grpc服务
+func (g *GrpcOptionsWare) AddNoAuthenticationRequire(grpcOptions ...GrpcOption) {
+	// 1.判断 NoAuthenticationRequire 是否初始化
+	_, ok := (*g)[NoAuthenticationRequire]
+	if !ok {
+		(*g)[NoAuthenticationRequire] = make(GrpcOptions, 0)
+	}
+	(*g)[NoAuthenticationRequire] = append((*g)[NoAuthenticationRequire], grpcOptions...)
+}
+
+// AddAuthenticationRequire:添加需要认证的路由
+func (g *GrpcOptionsWare) AddAuthenticationRequire(grpcOptions ...GrpcOption) {
+	// 1.判断 NoAuthenticationRequire 是否初始化
+	_, ok := (*g)[AuthenticationRequire]
+	if !ok {
+		(*g)[AuthenticationRequire] = make(GrpcOptions, 0)
+	}
+	(*g)[AuthenticationRequire] = append((*g)[AuthenticationRequire], grpcOptions...)
 }
 
 // LoadAll:加载所有服务
-func (g *GrpcOptions) LoadAll(server *grpc.Server) {
-	for _, v := range *g {
+func (g *GrpcOptionsWare) LoadAll(server *grpc.Server, key string) {
+	for _, v := range (*g)[key] {
 		v(server)
 	}
 }
@@ -49,16 +81,61 @@ func GrpcSetUp() {
 		zap.L().Error("Listen Error", zap.Error(err))
 		return
 	}
-	grpcServer := grpc.NewServer()
+	lis2, err2 := net.Listen("tcp", ":"+strconv.Itoa(settings.GetInt("APP.Port")+2))
+	if err2 != nil {
+		zap.L().Error("Listen Error", zap.Error(err))
+		return
+	}
+	// grpcAuth:需要认证的grpcServer
+	grpcNoAuth := grpc.NewServer(grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+		grpc_ctxtags.StreamServerInterceptor(),
+		grpc_opentracing.StreamServerInterceptor(),
+		grpc_prometheus.StreamServerInterceptor,
+		grpc_zap.StreamServerInterceptor(zap.L()),
+		//grpc_auth.StreamServerInterceptor(middleware.GVerificationJWT),
+		grpc_recovery.StreamServerInterceptor(),
+	)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(),
+			grpc_prometheus.UnaryServerInterceptor,
+			grpc_zap.UnaryServerInterceptor(zap.L()),
+			//grpc_auth.UnaryServerInterceptor(middleware.GVerificationJWT),
+			grpc_recovery.UnaryServerInterceptor(),
+		)))
+	grpcAuth := grpc.NewServer(grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+		grpc_ctxtags.StreamServerInterceptor(),
+		grpc_opentracing.StreamServerInterceptor(),
+		grpc_prometheus.StreamServerInterceptor,
+		grpc_zap.StreamServerInterceptor(zap.L()),
+		grpc_auth.StreamServerInterceptor(middleware.GVerificationJWT),
+		grpc_recovery.StreamServerInterceptor(),
+	)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(),
+			grpc_prometheus.UnaryServerInterceptor,
+			grpc_zap.UnaryServerInterceptor(zap.L()),
+			grpc_auth.UnaryServerInterceptor(middleware.GVerificationJWT),
+			grpc_recovery.UnaryServerInterceptor(),
+		)))
 	grpcInternalAdd()
-	GrpcOptionsWares.LoadAll(grpcServer)
+	GrpcOptionsWares.LoadAll(grpcNoAuth, NoAuthenticationRequire)
+	GrpcOptionsWares.LoadAll(grpcAuth, AuthenticationRequire)
 	// 在给定的gRPC服务器上注册服务器反射服务
-	reflection.Register(grpcServer)
+	reflection.Register(grpcNoAuth)
+	reflection.Register(grpcAuth)
 
 	// 协程启动
 	go func() {
-		if err := grpcServer.Serve(lis); err != nil {
-			zap.L().Error("grpcServer Serve Error", zap.Error(err))
+		if err := grpcNoAuth.Serve(lis); err != nil {
+			zap.L().Error("grpcAuth Serve Error", zap.Error(err))
+			panic(err)
+		}
+	}()
+	go func() {
+		if err := grpcAuth.Serve(lis2); err != nil {
+			zap.L().Error("grpcAuth Serve Error", zap.Error(err))
 			panic(err)
 		}
 	}()
@@ -69,19 +146,20 @@ func GrpcSetUp() {
 		s := <-c
 		switch s {
 		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
-			grpcServer.GracefulStop()
+			grpcNoAuth.GracefulStop()
+			grpcAuth.GracefulStop()
 			return
 		}
 	}
-	//return grpcServer
+	//return grpcAuth
 }
 
 // 相关路由
 func grpcInternalAdd() {
-	GrpcOptionsWares.AddGrpcOptionsWares(User)
+	GrpcOptionsWares.AddNoAuthenticationRequire(User)
 	// 如果是refresh模式需要额外注册一个服务
 	if settings.GetString("JWT.Mode") == "refresh" {
-		GrpcOptionsWares.AddGrpcOptionsWares(Jwt)
+		GrpcOptionsWares.AddNoAuthenticationRequire(Jwt)
 	}
 }
 
