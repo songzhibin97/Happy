@@ -7,6 +7,8 @@ package controller
 import (
 	"Happy/model/model"
 	"Happy/settings"
+	"context"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -17,7 +19,9 @@ import (
 	enTranslations "github.com/go-playground/validator/v10/translations/en"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/metadata"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -148,7 +152,7 @@ func RemoveTopStruct(fields map[string]string) string {
 }
 
 // ParameterVerification:校验gin请求参数
-func ParameterVerification(c *gin.Context, i interface{}) {
+func ParameterVerification(c *gin.Context, i interface{}) error {
 	if err := c.ShouldBind(i); err != nil {
 		// 校验失败
 		// 判断error是否是校验失败的error
@@ -157,11 +161,35 @@ func ParameterVerification(c *gin.Context, i interface{}) {
 			// 如果不是校验失败的错误就返回异常 标记服务器异常
 			zap.L().Error("IsVerifyError", zap.Error(err))
 			model.ResponseErrorWithMsg(c, model.CodeServerBusy, err.Error())
-			return
+			return model.CodeServerBusy.Err()
 		}
 		// 是参数校验的错误返回对应错误
 		zap.L().Info("VerifyError", zap.Any("error", errs))
 		model.ResponseErrorWithMsg(c, model.CodeInvalidParams, errs)
-		return
+		return model.CodeInvalidParams.Err()
 	}
+	return nil
+}
+
+// StoA:string转int
+// 如果error不为空将c中封装返回值
+func StoA(s string, c *gin.Context) (int, error) {
+	res, err := strconv.Atoi(s)
+	if err != nil {
+		model.ResponseErrorWithMsg(c, model.CodeInvalidParams, s)
+	}
+	return res, err
+}
+
+// GetToken:获取token并绑定到请求头上
+func GetToken(c *gin.Context) (context.Context, error) {
+	token, ok := c.Get("accessJWT")
+	if !ok {
+		zap.L().Error("Get(middleware.AccessToken)")
+		model.ResponseErrorWithMsg(c, model.CodeServerBusy, "获取上下文Token失败")
+		return nil, errors.New("获取上下文Token失败")
+	}
+	md := metadata.Pairs("authorization", fmt.Sprintf("bearer %s", token))
+	ctx := metadata.NewOutgoingContext(c, md)
+	return ctx, nil
 }

@@ -123,7 +123,7 @@ func internalAdd() {
 
 // OtherApp:其他加入
 func OtherApp() {
-	OptionsWares.AddAuthenticationRequire(Ping, Community)
+	OptionsWares.AddAuthenticationRequire(Ping, Community, Post)
 }
 
 // =========== function ==========
@@ -168,4 +168,11 @@ func Ping(e *gin.RouterGroup) {
 func Community(e *gin.RouterGroup) {
 	e.POST("communityList", controller.CommunityList)
 	e.POST("communityDetail", controller.CommunityDetail)
+}
+
+// Post:帖子相关
+func Post(e *gin.RouterGroup) {
+	e.GET("PostList", controller.PostList)
+	e.GET("GetPostDetail", controller.GetPostDetail)
+	e.POST("CreatePost", controller.PostList)
 }

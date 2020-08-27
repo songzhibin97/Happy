@@ -44,7 +44,10 @@ func SignUpHandler(c *gin.Context) {
 	// 1.获取请求参数
 	u := new(model.RegisterForm)
 	// 2.校验有效性(使用validator来进行校验)
-	ParameterVerification(c, u)
+	err := ParameterVerification(c, u)
+	if err != nil {
+		return
+	}
 	cc := pbUser.NewUserClient(GrpcConnNoAuth)
 	r, err := cc.Register(c, &pbUser.RegisterRequest{
 		UserName:         u.UserName,
@@ -68,7 +71,10 @@ func SignUpHandler(c *gin.Context) {
 func LoginHandler(c *gin.Context) {
 	u := new(model.LoginGet)
 	// 2.校验有效性(使用validator来进行校验)
-	ParameterVerification(c, u)
+	err := ParameterVerification(c, u)
+	if err != nil {
+		return
+	}
 	// 改用grpc内部调用
 	// grpc.WithInsecure() 安全参数 可传可不传
 	cc := pbUser.NewUserClient(GrpcConnNoAuth)

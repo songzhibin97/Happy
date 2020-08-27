@@ -40,6 +40,7 @@ func VerificationJWT(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("pbUser.NewUserClient", zap.Error(err))
 		model.ResponseErrorWithMsg(c, model.CodeServerBusy, err.Error())
+		c.Abort()
 		return
 	}
 	switch r.State {

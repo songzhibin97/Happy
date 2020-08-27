@@ -19,7 +19,10 @@ import (
 func VerificationCode(c *gin.Context) {
 	e := new(model.Email)
 	// 2.校验有效性(使用validator来进行校验)
-	ParameterVerification(c, e)
+	err := ParameterVerification(c, e)
+	if err != nil {
+		return
+	}
 	cc := pbUser.NewUserClient(GrpcConnNoAuth)
 	r, err := cc.Verification(c, &pbUser.VerificationRequest{
 		Email: e.Addr,
