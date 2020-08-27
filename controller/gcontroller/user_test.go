@@ -41,7 +41,7 @@ func TestUserServer_Register(t *testing.T) {
 	c := pb.NewUserClient(conn)
 	// 调用服务
 	// c.Greet() .proto 生成go文件的服务方法
-	r, err := c.Register(context.TODO(), &pb.RegisterRequest{UserName: "Test1"})
+	r, err := c.Register(context.TODO(), &pb.RegisterRequest{UserName: "Test2", Password: "123456", ConfirmPassword: "123456", Email: "718428482@qq.com", VerificationCode: "W5BCS9qt"})
 	if err != nil {
 		fmt.Println("err", err)
 		return
@@ -78,7 +78,7 @@ func TestUserServer_Login(t *testing.T) {
 // 验证码
 func TestUserServer_Verification(t *testing.T) {
 	// grpc.WithInsecure() 安全参数 可传可不传
-	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8082", grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("监听失败", err)
 	}

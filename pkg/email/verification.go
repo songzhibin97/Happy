@@ -54,7 +54,7 @@ var GE = EmailAuth{
 	Host:     QQHost,
 	Server:   QQServerAddr,
 	Auth:     "718428482@qq.com",
-	Password: "qprdvdxqnhhvbcdg",
+	Password: "",
 }
 
 // Send:发送邮件

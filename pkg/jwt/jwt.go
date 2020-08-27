@@ -13,13 +13,13 @@ import (
 const (
 	// 糖
 	Sweet           = "Happy"
-	TokenDuration   = time.Minute * 10
+	TokenDuration   = time.Hour
 	RefreshDuration = time.Hour * 24 * 14
 )
 
 // Auth:Jwt认证结构体
 type Auth struct {
-	Uid int `json:"user_id"` // 记录唯一标识 uid
+	Uid int64 `json:"user_id"` // 记录唯一标识 uid
 	jwt.StandardClaims
 }
 
@@ -34,7 +34,7 @@ func isValid(t int64) bool {
 }
 
 // GetJWT:进行声明
-func GetJWT(uid int) (string, error) {
+func GetJWT(uid int64) (string, error) {
 	auth := Auth{
 		uid, // 自定义字段
 		jwt.StandardClaims{
@@ -82,7 +82,7 @@ func ParseJWT(jwtToken string) (*Auth, error) {
 }
 
 // GetACRFToken:同时生成access token 和 refresh token
-func GetACRFToken(uid int) (string, string, error) {
+func GetACRFToken(uid int64) (string, string, error) {
 	// 先生产一个access token
 	aToken, err := GetJWT(uid)
 	if err != nil {

@@ -55,7 +55,7 @@ func TestCommunityServer_CommunityDetail(t *testing.T) {
 	//// auth
 	//md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDEyMjE5LCJpYXQiOjE1OTg0MTE2MTksImlzcyI6IkhhcHB5In0.xS__TWRRvXX-HKZasL0g2kVGfZ73sAx3k7y6YAJwt-I")
 	//ctx := metadata.NewOutgoingContext(context.Background(), md)
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDk4NzQ4LCJpYXQiOjE1OTg0OTgxNDgsImlzcyI6IkhhcHB5In0.4tgI8CEaLrO85Ec51kuSvG4wb9d6dfiroaZifxjaeEI")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NTI3Mjc5LCJpYXQiOjE1OTg1MjM2NzksImlzcyI6IkhhcHB5In0.vWNYyVzJn6pnbIRsBXydFtOBBwn0-jmtcOKvmr2XVhg")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.CommunityDetail(ctx, &pb.CommunityDetailRequest{ID: 1})
 	if err != nil {

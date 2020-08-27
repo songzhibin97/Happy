@@ -35,6 +35,8 @@ const (
 
 	CodeGetListEmpty
 	CodeGetListError
+
+	CodePostError
 )
 
 // ResMsg:对应Code返回的Msg
@@ -58,6 +60,8 @@ var ResMsg = map[ResCode]string{
 	CodeInvalidVerificationCode: "验证码无效",
 	CodeGetListEmpty:            "获取列表为空",
 	CodeGetListError:            "获取列表失败",
+
+	CodePostError: "发帖失败",
 }
 
 // Msg:从Map获取Msg

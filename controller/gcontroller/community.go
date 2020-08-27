@@ -44,8 +44,8 @@ func (c *CommunityServer) CommunityDetail(ctx context.Context, request *pb.Commu
 		return (*pb.Response)(r), nil
 	}
 
-	// 获取社区列表
-	res, err := sqls.CommunityDetail(int(request.ID))
+	// 获取社区详情
+	res, err := sqls.CommunityDetail(request.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return (*pb.Response)(gmodel.ResponseError(model.CodeGetListEmpty)), nil

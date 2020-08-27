@@ -21,11 +21,11 @@ func GetCommunityList() ([]*model.CommunityList, error) {
 	return res, nil
 }
 
-// CommunityDetail:获取设备详情
-func CommunityDetail(id int) ([]*model.CommunityDetail, error) {
+// CommunityDetail:获取社区详情
+func CommunityDetail(id int64) (*model.CommunityDetail, error) {
 	sqlString := `SELECT community_id, community_name, introduction, create_time FROM community WHERE community_id = ?`
-	res := make([]*model.CommunityDetail, 0)
-	err := SearchAll(dbInstantiate, sqlString, &res, id)
+	res := new(model.CommunityDetail)
+	err := SearchRow(dbInstantiate, sqlString, res, id)
 	if err != nil {
 		zap.L().Error("GetCommunityList Error", zap.Error(err))
 		return res, err

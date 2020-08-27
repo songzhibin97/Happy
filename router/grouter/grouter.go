@@ -9,6 +9,7 @@ import (
 	"Happy/middleware"
 	pb3 "Happy/model/pmodel/community"
 	pb2 "Happy/model/pmodel/jwt"
+	pb4 "Happy/model/pmodel/post"
 	pb "Happy/model/pmodel/user"
 	"Happy/settings"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -162,7 +163,7 @@ func grpcInternalAdd() {
 
 	GrpcOptionsWares.AddNoAuthenticationRequire(Jwt)
 
-	GrpcOptionsWares.AddAuthenticationRequire(Community)
+	GrpcOptionsWares.AddAuthenticationRequire(Community, Post)
 }
 
 // ======== function =======
@@ -180,4 +181,9 @@ func Jwt(server *grpc.Server) {
 // Community:社区grpc服务
 func Community(server *grpc.Server) {
 	pb3.RegisterCommunityServer(server, new(gcontroller.CommunityServer))
+}
+
+// Post:帖子相关
+func Post(server *grpc.Server) {
+	pb4.RegisterPostServer(server, new(gcontroller.Post))
 }

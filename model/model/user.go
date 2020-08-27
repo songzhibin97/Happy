@@ -23,7 +23,7 @@ type LoginGet struct {
 
 // User:用与校验是否登陆成功
 type User struct {
-	UID      int    `db:"user_id"`
+	UID      int64  `db:"user_id"`
 	Username string `db:"username"`
 }
 

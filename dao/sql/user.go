@@ -60,3 +60,11 @@ func InsertUser(username, password string) bool {
 	}
 	return true
 }
+
+// GetUserName:根据用户ID获取用户name
+func GetUserName(uid int64) (*model.User, error) {
+	sqlString := `SELECT username FROM user Where user_id = ?`
+	u := new(model.User)
+	err := SearchRow(dbInstantiate, sqlString, u, uid)
+	return u, err
+}

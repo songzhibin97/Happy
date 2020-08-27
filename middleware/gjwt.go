@@ -17,8 +17,8 @@ import (
 // gwt的中间件
 func GVerificationJWT(ctx context.Context) (context.Context, error) {
 	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
-	zap.L().Info(token, zap.Error(err))
 	if err != nil {
+		zap.L().Info(token, zap.Error(err))
 		return nil, err
 	}
 	auth, err := jwt.ParseJWT(token)
