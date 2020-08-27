@@ -27,20 +27,20 @@ func (j *JwtServer) VerificationRefreshJWT(ctx context.Context, request *pb.Veri
 	auth, err := jwt.ParseRFToken(request.Access, request.Refresh)
 	if err != nil {
 		if err != model.CodeJWTExpired.Err() {
-			return (*pb.Response)(gmodel.ResponHappyror(model.CodeJWTExpired)), nil
+			return (*pb.Response)(gmodel.ResponseError(model.CodeJWTExpired)), nil
 
 		}
-		return (*pb.Response)(gmodel.ResponHappyror(model.CodeJWTVerificationFailed)), nil
+		return (*pb.Response)(gmodel.ResponseError(model.CodeJWTVerificationFailed)), nil
 	}
 	// 判断是否是最近一次的token
 	ok := redis.GetToken(int64(auth.Uid), request.Access)
 	if !ok {
-		return (*pb.Response)(gmodel.ResponHappyror(model.CodeMultiTerminalLogin)), nil
+		return (*pb.Response)(gmodel.ResponseError(model.CodeMultiTerminalLogin)), nil
 	}
 	// 生成新access token
 	newToken, err := jwt.GetJWT(auth.Uid)
 	if err != nil {
-		return (*pb.Response)(gmodel.ResponHappyror(model.CodeServerBusy)), nil
+		return (*pb.Response)(gmodel.ResponseError(model.CodeServerBusy)), nil
 	}
 	// 生成新的token放入redis进行缓存
 	redis.SetToken(int64(auth.Uid), newToken)

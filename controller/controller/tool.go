@@ -5,8 +5,10 @@
 package controller
 
 import (
+	"Happy/model/model"
 	"Happy/settings"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	"github.com/go-playground/locales/zh"
@@ -14,6 +16,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	enTranslations "github.com/go-playground/validator/v10/translations/en"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"go.uber.org/zap"
 	"reflect"
 	"strings"
 )
@@ -142,4 +145,23 @@ func RemoveTopStruct(fields map[string]string) string {
 		flag++
 	}
 	return res
+}
+
+// ParameterVerification:校验gin请求参数
+func ParameterVerification(c *gin.Context, i interface{}) {
+	if err := c.ShouldBind(i); err != nil {
+		// 校验失败
+		// 判断error是否是校验失败的error
+		errs, ok := IsVerifyError(err)
+		if !ok {
+			// 如果不是校验失败的错误就返回异常 标记服务器异常
+			zap.L().Error("IsVerifyError", zap.Error(err))
+			model.ResponseErrorWithMsg(c, model.CodeServerBusy, err.Error())
+			return
+		}
+		// 是参数校验的错误返回对应错误
+		zap.L().Info("VerifyError", zap.Any("error", errs))
+		model.ResponseErrorWithMsg(c, model.CodeInvalidParams, errs)
+		return
+	}
 }

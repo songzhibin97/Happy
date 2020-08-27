@@ -17,17 +17,20 @@ import (
 )
 
 // 用户相关
-var GrpcConn *grpc.ClientConn
+var GrpcConnNoAuth *grpc.ClientConn
+var GrpcConnAuth *grpc.ClientConn
 
 // 回收资源
 func CloseConn() {
-	_ = GrpcConn.Close()
+	_ = GrpcConnNoAuth.Close()
+	_ = GrpcConnAuth.Close()
 }
 
 // Init:初始化grpc连接
 func Init() {
 	var err error
-	GrpcConn, err = grpc.Dial(":"+strconv.Itoa(settings.GetInt("APP.Port")+1), grpc.WithInsecure())
+	GrpcConnNoAuth, err = grpc.Dial(":"+strconv.Itoa(settings.GetInt("GRPC.NoAuthPort")), grpc.WithInsecure())
+	GrpcConnAuth, err = grpc.Dial(":"+strconv.Itoa(settings.GetInt("GRPC.AuthPort")), grpc.WithInsecure())
 	if err != nil {
 		zap.L().Error("grpc.Dial Error", zap.Error(err))
 		//model.ResponseErrorWithMsg(c, model.CodeServerBusy, err.Error())
@@ -40,8 +43,9 @@ func Init() {
 func SignUpHandler(c *gin.Context) {
 	// 1.获取请求参数
 	u := new(model.RegisterForm)
-
-	cc := pbUser.NewUserClient(GrpcConn)
+	// 2.校验有效性(使用validator来进行校验)
+	ParameterVerification(c, u)
+	cc := pbUser.NewUserClient(GrpcConnNoAuth)
 	r, err := cc.Register(c, &pbUser.RegisterRequest{
 		UserName:         u.UserName,
 		Password:         u.Password,
@@ -63,10 +67,11 @@ func SignUpHandler(c *gin.Context) {
 // LoginHandler:登录
 func LoginHandler(c *gin.Context) {
 	u := new(model.LoginGet)
-
+	// 2.校验有效性(使用validator来进行校验)
+	ParameterVerification(c, u)
 	// 改用grpc内部调用
 	// grpc.WithInsecure() 安全参数 可传可不传
-	cc := pbUser.NewUserClient(GrpcConn)
+	cc := pbUser.NewUserClient(GrpcConnNoAuth)
 	r, err := cc.Login(c, &pbUser.LoginRequest{
 		UserName: u.UserName,
 		Password: u.Password,

@@ -18,7 +18,9 @@ import (
 // VerificationCode验证码相关
 func VerificationCode(c *gin.Context) {
 	e := new(model.Email)
-	cc := pbUser.NewUserClient(GrpcConn)
+	// 2.校验有效性(使用validator来进行校验)
+	ParameterVerification(c, e)
+	cc := pbUser.NewUserClient(GrpcConnNoAuth)
 	r, err := cc.Verification(c, &pbUser.VerificationRequest{
 		Email: e.Addr,
 	})

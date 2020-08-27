@@ -33,7 +33,7 @@ func VerificationJWT(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	cc := pbJwt.NewJWTClient(controller.GrpcConn)
+	cc := pbJwt.NewJWTClient(controller.GrpcConnNoAuth)
 	r, err := cc.VerificationJWT(c, &pbJwt.VerificationJWTRequest{
 		Access: access,
 	})
@@ -64,6 +64,7 @@ func VerificationJWT(c *gin.Context) {
 		return
 	case pbJwt.VerificationJWTResponse_Pass:
 		// 上下文存入
+		c.Set(AccessToken, access)
 		c.Set(ConTextUserID, r.Uid)
 		c.Next()
 	}
@@ -74,7 +75,7 @@ func VerificationRefreshJWT(c *gin.Context) {
 	access := c.Request.Header.Get(AccessToken)
 	refresh := c.Request.Header.Get(RefreshToken)
 
-	cc := pbJwt.NewJWTClient(controller.GrpcConn)
+	cc := pbJwt.NewJWTClient(controller.GrpcConnNoAuth)
 	r, err := cc.VerificationRefreshJWT(c, &pbJwt.VerificationRefreshJWTRequest{
 		Access:  access,
 		Refresh: refresh,

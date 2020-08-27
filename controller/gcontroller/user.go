@@ -42,10 +42,10 @@ func (s *UserServer) Register(ctx context.Context, request *pbUser.RegisterReque
 	if err != nil {
 		zap.L().Info("IsExist Error", zap.Error(err))
 		if err == model.CodeUserExist.Err() {
-			return gmodel.ResponHappyror(model.CodeUserExist), nil
+			return gmodel.ResponseError(model.CodeUserExist), nil
 		}
 		// 否则是查询错误
-		return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, err.Error()), nil
+		return gmodel.ResponseWithMsg(model.CodeServerBusy, err.Error()), nil
 	}
 	// 这里使用邮箱地址作为redis的ip key
 
@@ -53,13 +53,13 @@ func (s *UserServer) Register(ctx context.Context, request *pbUser.RegisterReque
 	code, ok := redis.GetVerificationCode(request.Email)
 	// 如果已经存在
 	if !ok || code != request.VerificationCode {
-		return gmodel.ResponHappyror(model.CodeInvalidVerificationCode), nil
+		return gmodel.ResponseError(model.CodeInvalidVerificationCode), nil
 	}
 	// 5.校验完成 插入数据库
 	ok = sqls.InsertUser(request.UserName, request.Password)
 	if !ok {
 		zap.L().Info("用户创建失败")
-		return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, "用户创建失败"), nil
+		return gmodel.ResponseWithMsg(model.CodeServerBusy, "用户创建失败"), nil
 	}
 	return gmodel.ResponseSuccess(map[string]string{"success": "ok"}), nil
 }
@@ -78,10 +78,10 @@ func (s *UserServer) Login(ctx context.Context, request *pbUser.LoginRequest) (*
 		zap.L().Info("IsUserValid Error", zap.Error(err))
 		// 如果是用户已经存在返回对应的错误信息
 		if err == model.CodeInvalidPassword.Err() || err == sql.ErrNoRows {
-			return gmodel.ResponHappyror(model.CodeInvalidPassword), nil
+			return gmodel.ResponseError(model.CodeInvalidPassword), nil
 		}
 		// 否则是查询错误
-		return gmodel.ResponHappyror(model.CodeServerBusy), nil
+		return gmodel.ResponseError(model.CodeServerBusy), nil
 	}
 	// 校验成功 返回jwt
 	// 判断当前jwt的状态
@@ -89,7 +89,7 @@ func (s *UserServer) Login(ctx context.Context, request *pbUser.LoginRequest) (*
 		aToken, rToken, err := jwt.GetACRFToken(user.UID)
 		if err != nil {
 			zap.L().Error("GetACRFToken Error", zap.Error(err))
-			return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, err.Error()), nil
+			return gmodel.ResponseWithMsg(model.CodeServerBusy, err.Error()), nil
 
 		}
 		//gin.H{
@@ -104,7 +104,7 @@ func (s *UserServer) Login(ctx context.Context, request *pbUser.LoginRequest) (*
 		aToken, err := jwt.GetJWT(user.UID)
 		if err != nil {
 			zap.L().Error("GetJWT Error", zap.Error(err))
-			return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, err.Error()), nil
+			return gmodel.ResponseWithMsg(model.CodeServerBusy, err.Error()), nil
 		}
 		redis.SetToken(int64(user.UID), aToken)
 		//gin.H{
@@ -125,7 +125,7 @@ func (s *UserServer) Verification(ctx context.Context, request *pbUser.Verificat
 	if redis.GetCurrentLimit(request.Email) {
 		// 如果有缓存的话证明已经发送过邮件了 需要等
 		zap.L().Info("Request Bus:", zap.String("email", request.Email))
-		return gmodel.ResponHappyror(model.CodeFrequentRequests), nil
+		return gmodel.ResponseError(model.CodeFrequentRequests), nil
 	}
 	// 证明有效请求
 	// 获取验证码
@@ -148,10 +148,10 @@ func _verification(request interface{}) (*pbUser.Response, error) {
 		if !ok {
 			// 如果不是校验失败的错误就返回异常
 			zap.L().Error("IsVerifyError", zap.Error(err))
-			return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, err), err
+			return gmodel.ResponseWithMsg(model.CodeServerBusy, err), err
 		}
 		zap.L().Info("VerifyError", zap.Any("error", errs))
-		return gmodel.ResponHappyrorWithMsg(model.CodeServerBusy, errs), err
+		return gmodel.ResponseWithMsg(model.CodeServerBusy, errs), err
 	}
 	return nil, nil
 }

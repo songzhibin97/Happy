@@ -92,7 +92,7 @@ func SetUp() {
 		OptionsWares.LoadAll(ar, AuthenticationRequire)
 	}
 	r.NoRoute(func(c *gin.Context) {
-		model.ResponseSuccess(c, gin.H{})
+		model.ResponseErrorWithMsg(c, model.Code404, gin.H{"访问异常": "没有相关资源,请检查URL"})
 	})
 	defer controller.CloseConn()
 	if err := endless.ListenAndServe(":"+settings.GetString("APP.Port"), r); err != nil {
@@ -115,7 +115,7 @@ func InitOptionsWare() {
 
 // internalAdd:加入注册登录
 func internalAdd() {
-	OptionsWares.AddNoAuthenticationRequire(Ws, SignUp, Login, GetVerificationCode)
+	OptionsWares.AddNoAuthenticationRequire(Ws, User, GetVerificationCode)
 	if settings.GetString("JWT.Mode") == "refresh" {
 		OptionsWares.AddNoAuthenticationRequire(Refresh)
 	}
@@ -123,7 +123,7 @@ func internalAdd() {
 
 // OtherApp:其他加入
 func OtherApp() {
-	OptionsWares.AddAuthenticationRequire(Ping)
+	OptionsWares.AddAuthenticationRequire(Ping, Community)
 }
 
 // =========== function ==========
@@ -138,20 +138,18 @@ func Refresh(e *gin.RouterGroup) {
 	e.POST("refresh", middleware.VerificationRefreshJWT)
 }
 
-// SignUp:注册
-func SignUp(e *gin.RouterGroup) {
-	// 注册
-	e.POST("SignUp", controller.SignUpHandler)
-}
-
-// Login:登录
-func Login(e *gin.RouterGroup) {
-	e.POST("Login", controller.LoginHandler)
-}
-
 // GetVerificationCode:获取验证码
 func GetVerificationCode(e *gin.RouterGroup) {
 	e.POST("VerificationCode", controller.VerificationCode)
+}
+
+// 用户相关
+
+// User:用户相关
+func User(e *gin.RouterGroup) {
+	// 注册
+	e.POST("SignUp", controller.SignUpHandler)
+	e.POST("Login", controller.LoginHandler)
 }
 
 // Ping:测试
@@ -162,4 +160,12 @@ func Ping(e *gin.RouterGroup) {
 	e.POST("ping", func(c *gin.Context) {
 		c.JSON(200, "Pong")
 	})
+}
+
+// 社区相关
+
+// Community:社区相关
+func Community(e *gin.RouterGroup) {
+	e.POST("communityList", controller.CommunityList)
+	e.POST("communityDetail", controller.CommunityDetail)
 }

@@ -14,7 +14,7 @@ import (
 
 func TestJwtServer_VerificationRefreshJWT(t *testing.T) {
 	// grpc.WithInsecure() 安全参数 可传可不传
-	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8082", grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("监听失败", err)
 	}

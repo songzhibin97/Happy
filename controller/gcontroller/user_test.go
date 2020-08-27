@@ -32,7 +32,7 @@ func (t *Token) RequireTransportSecurity() bool {
 // 注册
 func TestUserServer_Register(t *testing.T) {
 	// grpc.WithInsecure() 安全参数 可传可不传
-	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8082", grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("监听失败", err)
 	}
@@ -52,7 +52,7 @@ func TestUserServer_Register(t *testing.T) {
 // 登录
 func TestUserServer_Login(t *testing.T) {
 	// grpc.WithInsecure() 安全参数 可传可不传
-	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8082", grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("监听失败", err)
 	}

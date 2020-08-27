@@ -13,8 +13,8 @@ import (
 
 // grpc响应封装
 
-// ResponHappyrorWithMsg:自定义error状态码以及错误信息
-func ResponHappyrorWithMsg(code model.ResCode, errMsg interface{}) *pb.Response {
+// ResponseWithMsg:自定义error状态码以及错误信息
+func ResponseWithMsg(code model.ResCode, errMsg interface{}) *pb.Response {
 	msg, _ := json.Marshal(errMsg)
 	return &pb.Response{
 		Code: int32(code),
@@ -22,8 +22,8 @@ func ResponHappyrorWithMsg(code model.ResCode, errMsg interface{}) *pb.Response 
 	}
 }
 
-// ResponHappyror:返回已知错误类型
-func ResponHappyror(code model.ResCode) *pb.Response {
+// ResponseError:返回已知错误类型
+func ResponseError(code model.ResCode) *pb.Response {
 	return &pb.Response{
 		Code: int32(code),
 		Msg:  code.Msg(),

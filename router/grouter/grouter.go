@@ -7,6 +7,7 @@ package grouter
 import (
 	"Happy/controller/gcontroller"
 	"Happy/middleware"
+	pb3 "Happy/model/pmodel/community"
 	pb2 "Happy/model/pmodel/jwt"
 	pb "Happy/model/pmodel/user"
 	"Happy/settings"
@@ -76,12 +77,12 @@ func (g *GrpcOptionsWare) LoadAll(server *grpc.Server, key string) {
 // grpc router
 func GrpcSetUp() {
 	// 如果使用共存需要返回 *grpc.Server
-	lis, err := net.Listen("tcp", ":"+strconv.Itoa(settings.GetInt("APP.Port")+1))
+	nAuth, err := net.Listen("tcp", ":"+strconv.Itoa(settings.GetInt("GRPC.NoAuthPort")))
 	if err != nil {
 		zap.L().Error("Listen Error", zap.Error(err))
 		return
 	}
-	lis2, err2 := net.Listen("tcp", ":"+strconv.Itoa(settings.GetInt("APP.Port")+2))
+	Auth, err2 := net.Listen("tcp", ":"+strconv.Itoa(settings.GetInt("GRPC.AuthPort")))
 	if err2 != nil {
 		zap.L().Error("Listen Error", zap.Error(err))
 		return
@@ -120,21 +121,22 @@ func GrpcSetUp() {
 			grpc_recovery.UnaryServerInterceptor(),
 		)))
 	grpcInternalAdd()
+
 	GrpcOptionsWares.LoadAll(grpcNoAuth, NoAuthenticationRequire)
+
 	GrpcOptionsWares.LoadAll(grpcAuth, AuthenticationRequire)
 	// 在给定的gRPC服务器上注册服务器反射服务
 	reflection.Register(grpcNoAuth)
 	reflection.Register(grpcAuth)
-
 	// 协程启动
 	go func() {
-		if err := grpcNoAuth.Serve(lis); err != nil {
+		if err := grpcNoAuth.Serve(nAuth); err != nil {
 			zap.L().Error("grpcAuth Serve Error", zap.Error(err))
 			panic(err)
 		}
 	}()
 	go func() {
-		if err := grpcAuth.Serve(lis2); err != nil {
+		if err := grpcAuth.Serve(Auth); err != nil {
 			zap.L().Error("grpcAuth Serve Error", zap.Error(err))
 			panic(err)
 		}
@@ -157,10 +159,10 @@ func GrpcSetUp() {
 // 相关路由
 func grpcInternalAdd() {
 	GrpcOptionsWares.AddNoAuthenticationRequire(User)
-	// 如果是refresh模式需要额外注册一个服务
-	if settings.GetString("JWT.Mode") == "refresh" {
-		GrpcOptionsWares.AddNoAuthenticationRequire(Jwt)
-	}
+
+	GrpcOptionsWares.AddNoAuthenticationRequire(Jwt)
+
+	GrpcOptionsWares.AddAuthenticationRequire(Community)
 }
 
 // ======== function =======
@@ -173,4 +175,9 @@ func User(server *grpc.Server) {
 // Jwt:json-web-token相关grpc服务
 func Jwt(server *grpc.Server) {
 	pb2.RegisterJWTServer(server, new(gcontroller.JwtServer))
+}
+
+// Community:社区grpc服务
+func Community(server *grpc.Server) {
+	pb3.RegisterCommunityServer(server, new(gcontroller.CommunityServer))
 }

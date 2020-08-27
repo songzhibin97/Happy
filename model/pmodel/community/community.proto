@@ -1,3 +1,29 @@
 syntax = "proto3";
 package pbCommunity;
 
+// ============ 社区接口 ================
+
+// ============ 获取社区列表 =============
+message CommunityListRequest {
+  // 查询到所有的社区（community_id, community_name) 以列表的形式返回
+}
+
+
+// =========== 社区分类详情 ============
+message CommunityDetailRequest{
+  int64 ID = 1; // 社区id //tag:validate:"required"
+}
+
+// Response
+message Response {
+  // 响应
+  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
+  string Msg = 2; // 异常提示
+  map<string, string > Data = 3; // 携带信息
+}
+
+// 服务注册
+service Community {
+  rpc CommunityList (CommunityListRequest) returns (Response) {}
+  rpc CommunityDetail(CommunityDetailRequest)returns(Response){}
+}
