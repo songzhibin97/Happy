@@ -9,7 +9,7 @@ import "time"
 // 限流 放置恶意调用开放接口
 
 const (
-	CurrentLimit        = "CurrentLimit_"
+	CurrentLimit        = "Happy:CurrentLimit:"
 	CurrentLimitTimeOut = time.Minute
 )
 

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	Blacklist = "Blacklist_"
+	Blacklist = "Happy:Blacklist:"
 	// TimeOut引用jwt的Timeout
 	BlacklistTimeOut = jwt.RefreshDuration
 )

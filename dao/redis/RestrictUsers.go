@@ -7,7 +7,7 @@ package redis
 import "strconv"
 
 // 利用redis建立一个多端登录的限制
-const UserToken = "UToken"
+const UserToken = "Happy:UToken:"
 
 // SetToken:设置Token
 func SetToken(uid int64, accessToken string) {
