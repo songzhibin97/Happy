@@ -21,9 +21,9 @@ import (
 	}
 */
 type ResponseStruct struct {
-	Code ResCode     `json:"code"`
-	Msg  interface{} `json:"msg"`
-	Data interface{} `json:"data"`
+	Code ResCode     `json:"code"` // 业务状态码
+	Msg  interface{} `json:"msg"`  // 提示信息
+	Data interface{} `json:"data"` // 数据
 }
 
 // ResponseErrorWithMsg:自定义error状态码以及错误信息

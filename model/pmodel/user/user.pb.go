@@ -27,12 +27,12 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 // =================== (注册) ====================
 type RegisterRequest struct {
 	// 注册请求
-	UserName             string   `protobuf:"bytes,1,opt,name=UserName,proto3" json:"UserName,omitempty" validate:"required,gte=4,lt=20"`
-	Password             string   `protobuf:"bytes,2,opt,name=Password,proto3" json:"Password,omitempty" validate:"required,gte=6,lt=20"`
-	ConfirmPassword      string   `protobuf:"bytes,3,opt,name=ConfirmPassword,proto3" json:"ConfirmPassword,omitempty" validate:"required,eqfield=Password,gte=6,lt=20"`
-	UserInfo             string   `protobuf:"bytes,4,opt,name=UserInfo,proto3" json:"UserInfo,omitempty"`
-	Email                string   `protobuf:"bytes,5,opt,name=Email,proto3" json:"Email,omitempty" validate:"required,email"`
-	VerificationCode     string   `protobuf:"bytes,6,opt,name=VerificationCode,proto3" json:"VerificationCode,omitempty" validate:"required"`
+	UserName             string   `protobuf:"bytes,1,opt,name=UserName,proto3" json:"UserName,omitempty" validate:"required,gte=4,lt=20"`                                // 用户名*
+	Password             string   `protobuf:"bytes,2,opt,name=Password,proto3" json:"Password,omitempty" validate:"required,gte=6,lt=20"`                                // 密码*
+	ConfirmPassword      string   `protobuf:"bytes,3,opt,name=ConfirmPassword,proto3" json:"ConfirmPassword,omitempty" validate:"required,eqfield=Password,gte=6,lt=20"` // re密码*
+	UserInfo             string   `protobuf:"bytes,4,opt,name=UserInfo,proto3" json:"UserInfo,omitempty"`                                                                // 用户简介
+	Email                string   `protobuf:"bytes,5,opt,name=Email,proto3" json:"Email,omitempty" validate:"required,email"`                                            // 邮箱*
+	VerificationCode     string   `protobuf:"bytes,6,opt,name=VerificationCode,proto3" json:"VerificationCode,omitempty" validate:"required"`                            // 验证码*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -108,8 +108,8 @@ func (m *RegisterRequest) GetVerificationCode() string {
 // =================== (登录) ====================
 type LoginRequest struct {
 	// 登录请求
-	UserName             string   `protobuf:"bytes,1,opt,name=UserName,proto3" json:"UserName,omitempty" validate:"required,gte=4,lt=20"`
-	Password             string   `protobuf:"bytes,2,opt,name=Password,proto3" json:"Password,omitempty" validate:"required,gte=4,lt=20"`
+	UserName             string   `protobuf:"bytes,1,opt,name=UserName,proto3" json:"UserName,omitempty" validate:"required,gte=4,lt=20"` // 用户名*
+	Password             string   `protobuf:"bytes,2,opt,name=Password,proto3" json:"Password,omitempty" validate:"required,gte=4,lt=20"` // 密码*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -157,7 +157,7 @@ func (m *LoginRequest) GetPassword() string {
 // ==============(验证码)=============
 type VerificationRequest struct {
 	// 验证码
-	Email                string   `protobuf:"bytes,1,opt,name=Email,proto3" json:"Email,omitempty" validate:"required,email"`
+	Email                string   `protobuf:"bytes,1,opt,name=Email,proto3" json:"Email,omitempty" validate:"required,email"` // 邮箱*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -197,9 +197,9 @@ func (m *VerificationRequest) GetEmail() string {
 
 type Response struct {
 	// 响应
-	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
-	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`                                                                                        // 业务响应状态码
+	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`                                                                                           // 提示信息
+	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // 数据
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`

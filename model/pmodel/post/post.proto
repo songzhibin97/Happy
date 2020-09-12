@@ -7,15 +7,15 @@ package pbPost;
 message CreatePostRequest {
   //  int64 PostID = 1; // 帖子ID  // Tag: validate:"required"
   //  int64 AuthorID = 2; // 作者ID // Tag: validate:"required"
-  int64 CommunityID = 1; // 所属社区ID // Tag: validate:"required"
-  string Title = 2 ; // 帖子标题 // Tag: validate:"required"
+  int64 CommunityID = 1; // 社区ID* // Tag: validate:"required"
+  string Title = 2 ; // 帖子标题* // Tag: validate:"required"
   string Content = 3; // 帖子详情 // Tag: validate:"required"
 }
 
 
 // 获取帖子详情
 message GetPostDetailRequest {
-  int64 PostID = 1 ; // 帖子ID // Tag: validate:"required,numeric"
+  int64 PostID = 1 ; // 帖子ID* // Tag: validate:"required,numeric"
 
 }
 
@@ -26,21 +26,21 @@ message GetPostListRequest{
     Community = 0;
     Author = 1;
   }
-  State Model = 1;
-  oneof ID {
+  State Model = 1; // 查询模式*
+  oneof ID {// ID*
     int64 CommunityID = 2;
     int64 AuthorID = 3;
   }
-  int64 Page = 4; // Tag: validate:"required"
-  int64 Max = 5; // Tag: validate:"required"
+  int64 Page = 4; // 页码 // Tag: validate:"required"
+  int64 Max = 5; // 每页最大数 // Tag: validate:"required"
 }
 
 // Response:响应
 message Response {
   // 响应
-  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
-  string Msg = 2; // 异常提示
-  map<string, string > Data = 3; // 携带信息
+  int32 Code = 1 ; // 业务响应状态码
+  string Msg = 2; // 提示信息
+  map<string, string > Data = 3; // 数据
 }
 
 

@@ -37,6 +37,17 @@ import (
 	- go.mod
 	- main.go // 主函数
 */
+
+// @title Happy
+// @version 0.01
+// @description 基于Grpc/Gin 扩展的一个社区系统
+// @termsOfService Open source
+
+// @contact.name SongZhiBin
+// @contact.email 718428482@qq.com
+
+// @host Gin:8080 Grpc: 8082/8083
+// @BasePath /
 func main() {
 	// 1.加载配置
 	err := settings.Init()

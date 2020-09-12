@@ -18,6 +18,7 @@ import (
 // JwtServer:定义jwtServer
 type JwtServer struct{}
 
+// VerificationRefreshJWT 刷新JWT接口
 func (j *JwtServer) VerificationRefreshJWT(ctx context.Context, request *pb.VerificationRefreshJWTRequest) (*pb.Response, error) {
 	// 校验请求参数
 	res, err := _verification(request)
@@ -47,6 +48,7 @@ func (j *JwtServer) VerificationRefreshJWT(ctx context.Context, request *pb.Veri
 	return (*pb.Response)(gmodel.ResponseSuccess(map[string]string{middleware.AccessToken: newToken})), nil
 }
 
+// VerificationJWT 校验JWT
 func (j *JwtServer) VerificationJWT(ctx context.Context, request *pb.VerificationJWTRequest) (*pb.VerificationJWTResponse, error) {
 	// 校验请求参数
 	_, err := _verification(request)

@@ -4,7 +4,7 @@ package pbJwt;
 
 // =================== (中间件验证是否有效) ====================
 message VerificationJWTRequest {
-  string Access = 1;  // tag:validate:"required"
+  string Access = 1;  // tag:validate:"required" // JWT*
 }
 
 message VerificationJWTResponse {
@@ -16,24 +16,24 @@ message VerificationJWTResponse {
     MultiTerminalLogin = 3 ; // jwt通过但是与redis不一致
     Pass = 4; // 通过
   }
-  StateOption  State = 1;
-  int64  Uid = 2;
+  StateOption  State = 1; // 状态
+  int64  Uid = 2; // 用户ID
 }
 
 
 // =================== (刷新JWT) ====================
 
 message VerificationRefreshJWTRequest {
-  string Access = 1;  // tag:validate:"required"
-  string Refresh = 2; // tag:validate:"required"
+  string Access = 1; // 动态JWT*  // tag:validate:"required"
+  string Refresh = 2; // 静态JWT* // tag:validate:"required"
 }
 
 
 message Response {
   // 响应
-  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
-  string Msg = 2; // 异常提示
-  map<string, string> Data = 3; // 携带信息
+  int32 Code = 1 ; // 业务响应状态码
+  string Msg = 2; // 提示信息
+  map<string, string> Data = 3; // 数据
 }
 
 

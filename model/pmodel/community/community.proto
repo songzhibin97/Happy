@@ -11,15 +11,15 @@ message CommunityListRequest {
 
 // =========== 社区分类详情 ============
 message CommunityDetailRequest{
-  int64 ID = 1; // 社区id //tag:validate:"required"
+  int64 ID = 1; // 社区ID* //tag:validate:""
 }
 
 // Response
 message Response {
   // 响应
-  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
-  string Msg = 2; // 异常提示
-  map<string, string > Data = 3; // 携带信息
+  int32 Code = 1 ; // 业务响应状态码
+  string Msg = 2; // 提示信息
+  map<string, string > Data = 3; // 数据
 }
 
 // 服务注册

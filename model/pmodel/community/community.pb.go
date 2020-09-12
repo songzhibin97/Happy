@@ -58,7 +58,7 @@ var xxx_messageInfo_CommunityListRequest proto.InternalMessageInfo
 
 // =========== 社区分类详情 ============
 type CommunityDetailRequest struct {
-	ID                   int64    `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty" validate:"required"`
+	ID                   int64    `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty" validate:"required"` // 社区ID*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -99,9 +99,9 @@ func (m *CommunityDetailRequest) GetID() int64 {
 // Response
 type Response struct {
 	// 响应
-	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
-	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`                                                                                        // 业务响应状态码
+	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`                                                                                           // 提示信息
+	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // 数据
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`

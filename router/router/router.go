@@ -6,6 +6,7 @@ package router
 
 import (
 	"Happy/controller/controller"
+	_ "Happy/docs"
 	"Happy/logger"
 	"Happy/middleware"
 	"Happy/model/model"
@@ -13,6 +14,8 @@ import (
 	"Happy/settings"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	gs "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"go.uber.org/zap"
 )
 
@@ -109,6 +112,7 @@ func InitOptionsWare() {
 	// 加入登录注册
 	internalAdd()
 	OtherApp()
+
 }
 
 // 用户相关路由
@@ -118,6 +122,9 @@ func internalAdd() {
 	OptionsWares.AddNoAuthenticationRequire(Ws, User, GetVerificationCode)
 	if settings.GetString("JWT.Mode") == "refresh" {
 		OptionsWares.AddNoAuthenticationRequire(Refresh)
+	}
+	if settings.GetString("App.Mode") == "dev" {
+		OptionsWares.AddAuthenticationRequire(Swagger)
 	}
 }
 
@@ -174,5 +181,10 @@ func Community(e *gin.RouterGroup) {
 func Post(e *gin.RouterGroup) {
 	e.GET("PostList", controller.PostList)
 	e.GET("GetPostDetail", controller.GetPostDetail)
-	e.POST("CreatePost", controller.PostList)
+	e.POST("CreatePost", controller.CreatePost)
+}
+
+// Swagger:接口相关
+func Swagger(e *gin.RouterGroup) {
+	e.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 }

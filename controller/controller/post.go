@@ -23,6 +23,19 @@ const (
 )
 
 // PostList:获取帖子列表
+// @Summary 获取帖子列表
+// @Description 用于获取帖子列表接口 内部调用grpc接口
+// @Tags 帖子相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param Mode query int false "获取帖子的模式"
+// @Param ID query int false "社区ID/用户ID"
+// @Param Page query int false "分页页码"
+// @Param Max query int false "每页最大数量"
+// @Security ApiKeyAuth
+// @Success 200 {object} model.ResponseStruct
+// @Router /PostList [get]
 func PostList(c *gin.Context) {
 	//cc := pbCommunity.NewCommunityClient(GrpcConnAuth)
 	mode := c.DefaultQuery(Mode, "0") // mode获取帖子的模式 0为社区 1为个人
@@ -88,6 +101,16 @@ func PostList(c *gin.Context) {
 }
 
 // CreatePost:新建帖子
+// @Summary 新建帖子
+// @Description 用于新建帖子接口 内部调用grpc接口
+// @Tags 帖子相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param object query model.CreatePost false "创建帖子参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} model.ResponseStruct
+// @Router /CreatePost [post]
 func CreatePost(c *gin.Context) {
 	// 参数校验
 	rq := new(model.CreatePost)
@@ -118,6 +141,16 @@ func CreatePost(c *gin.Context) {
 }
 
 // GetPostDetail:获取帖子详情
+// @Summary 获取帖子详情
+// @Description 用于获取帖子详情接口 内部调用grpc接口
+// @Tags 帖子相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param ID query int false "帖子ID"
+// @Security ApiKeyAuth
+// @Success 200 {object} model.ResponseStruct
+// @Router /GetPostDetail [get]
 func GetPostDetail(c *gin.Context) {
 	// 获取帖子id
 	id := c.Query(ID)

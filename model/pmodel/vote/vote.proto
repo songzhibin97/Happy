@@ -1,0 +1,20 @@
+syntax = "proto3"; // 指定版本
+package pbVote;
+
+// ======== Vote投票相关接口 =======
+
+
+
+
+
+
+
+
+
+// ======== Response ========
+message Response {
+  // 响应
+  int32 Code = 1 ; // 是否注册成功 返回状态码状态码
+  string Msg = 2; // 异常提示
+  map<string, string> Data = 3; // 携带信息
+}

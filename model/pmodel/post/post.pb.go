@@ -54,9 +54,9 @@ func (GetPostListRequest_State) EnumDescriptor() ([]byte, []int) {
 type CreatePostRequest struct {
 	//  int64 PostID = 1; // 帖子ID  // Tag: validate:"required,numeric"
 	//  int64 AuthorID = 2; // 作者ID // Tag: validate:"required,numeric"
-	CommunityID          int64    `protobuf:"varint,1,opt,name=CommunityID,proto3" json:"CommunityID,omitempty"`
-	Title                string   `protobuf:"bytes,2,opt,name=Title,proto3" json:"Title,omitempty" validate:"required"`
-	Content              string   `protobuf:"bytes,3,opt,name=Content,proto3" json:"Content,omitempty" validate:"required"`
+	CommunityID          int64    `protobuf:"varint,1,opt,name=CommunityID,proto3" json:"CommunityID,omitempty"`            // 社区ID*
+	Title                string   `protobuf:"bytes,2,opt,name=Title,proto3" json:"Title,omitempty" validate:"required"`     // 帖子标题*
+	Content              string   `protobuf:"bytes,3,opt,name=Content,proto3" json:"Content,omitempty" validate:"required"` // 帖子详情
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -110,7 +110,7 @@ func (m *CreatePostRequest) GetContent() string {
 
 // 获取帖子详情
 type GetPostDetailRequest struct {
-	PostID               int64    `protobuf:"varint,1,opt,name=PostID,proto3" json:"PostID,omitempty" validate:"required"`
+	PostID               int64    `protobuf:"varint,1,opt,name=PostID,proto3" json:"PostID,omitempty" validate:"required"` // 帖子ID*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -150,13 +150,13 @@ func (m *GetPostDetailRequest) GetPostID() int64 {
 
 // 获取帖子列表
 type GetPostListRequest struct {
-	Model GetPostListRequest_State `protobuf:"varint,1,opt,name=Model,proto3,enum=pbPost.GetPostListRequest_State" json:"Model,omitempty"`
+	Model GetPostListRequest_State `protobuf:"varint,1,opt,name=Model,proto3,enum=pbPost.GetPostListRequest_State" json:"Model,omitempty" validate:"oneof=0 1"` // 查询模式*
 	// Types that are valid to be assigned to ID:
 	//	*GetPostListRequest_CommunityID
 	//	*GetPostListRequest_AuthorID
-	ID                   isGetPostListRequest_ID `protobuf_oneof:"ID"`
-	Page                 int64                   `protobuf:"varint,4,opt,name=Page,proto3" json:"Page,omitempty" validate:"required"`
-	Max                  int64                   `protobuf:"varint,5,opt,name=Max,proto3" json:"Max,omitempty" validate:"required"`
+	ID                   isGetPostListRequest_ID `protobuf_oneof:"ID"`                                                                // ID*
+	Page                 int64                   `protobuf:"varint,4,opt,name=Page,proto3" json:"Page,omitempty" validate:"required"` // 页码
+	Max                  int64                   `protobuf:"varint,5,opt,name=Max,proto3" json:"Max,omitempty" validate:"required"`   // 每页最大数
 	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
 	XXX_unrecognized     []byte                  `json:"-"`
 	XXX_sizecache        int32                   `json:"-"`
@@ -256,9 +256,9 @@ func (*GetPostListRequest) XXX_OneofWrappers() []interface{} {
 // Response:响应
 type Response struct {
 	// 响应
-	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
-	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`                                                                                        // 业务响应状态码
+	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`                                                                                           // 提示信息
+	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // 数据
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`

@@ -15,6 +15,15 @@ import (
 )
 
 // CommunityList:获取社区列表
+// @Summary 获取社区列表
+// @Description 用于获取获取社区列表接口 内部调用grpc接口
+// @Tags 社区相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} model.ResponseStruct
+// @Router /communityList [post]
 func CommunityList(c *gin.Context) {
 	cc := pbCommunity.NewCommunityClient(GrpcConnAuth)
 	// 获取请求头的token
@@ -33,6 +42,16 @@ func CommunityList(c *gin.Context) {
 }
 
 // CommunityDetail:获取社区详情
+// @Summary 获取社区详情
+// @Description 用于获取社区详情接口 内部调用grpc接口
+// @Tags 社区相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param object query model.CommunityDetailRequest false "查询参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} model.ResponseStruct
+// @Router /communityDetail [post]
 func CommunityDetail(c *gin.Context) {
 	// 参数校验
 	rq := new(model.CommunityDetailRequest)

@@ -1,0 +1,269 @@
+basePath: /
+definitions:
+  model.ResponseStruct:
+    properties:
+      code:
+        description: 业务状态码
+        type: integer
+      data:
+        description: 数据
+        type: object
+      msg:
+        description: 提示信息
+        type: object
+    type: object
+host: 'Gin:8080 Grpc: 8082/8083'
+info:
+  contact:
+    email: 718428482@qq.com
+    name: SongZhiBin
+  description: 基于Grpc/Gin 扩展的一个社区系统
+  termsOfService: Open source
+  title: Happy
+  version: "0.01"
+paths:
+  /CreatePost:
+    post:
+      consumes:
+      - application/json
+      description: 用于新建帖子接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 社区ID*
+        in: query
+        name: community_id
+        required: true
+        type: integer
+      - description: 内容
+        in: query
+        name: content
+        type: string
+      - description: 标题*
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 新建帖子
+      tags:
+      - 帖子相关
+  /GetPostDetail:
+    get:
+      consumes:
+      - application/json
+      description: 用于获取帖子详情接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 帖子ID
+        in: query
+        name: ID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取帖子详情
+      tags:
+      - 帖子相关
+  /Login:
+    post:
+      consumes:
+      - application/json
+      description: 用于用户登录的接口 内部调用grpc接口
+      parameters:
+      - description: 密码*
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 用户名*
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 登录
+      tags:
+      - 用户相关
+  /PostList:
+    get:
+      consumes:
+      - application/json
+      description: 用于获取帖子列表接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 获取帖子的模式
+        in: query
+        name: Mode
+        type: integer
+      - description: 社区ID/用户ID
+        in: query
+        name: ID
+        type: integer
+      - description: 分页页码
+        in: query
+        name: Page
+        type: integer
+      - description: 每页最大数量
+        in: query
+        name: Max
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取帖子列表
+      tags:
+      - 帖子相关
+  /SignUp:
+    post:
+      consumes:
+      - application/json
+      description: 用于用户注册的接口 内部调用grpc接口
+      parameters:
+      - description: re密码*
+        in: query
+        name: confirm_password
+        required: true
+        type: string
+      - description: 邮箱*
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: 密码*
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 用户名*
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 验证码*
+        in: query
+        name: verification_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 注册
+      tags:
+      - 用户相关
+  /VerificationCode:
+    post:
+      consumes:
+      - application/json
+      description: 用于发送验证码的接口 内部调用grpc接口
+      parameters:
+      - description: 发送地址*
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 发送验证码
+      tags:
+      - 用户相关
+  /communityDetail:
+    post:
+      consumes:
+      - application/json
+      description: 用于获取社区详情接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 社区ID*
+        example: "0"
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取社区详情
+      tags:
+      - 社区相关
+  /communityList:
+    post:
+      consumes:
+      - application/json
+      description: 用于获取获取社区列表接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取社区列表
+      tags:
+      - 社区相关
+swagger: "2.0"

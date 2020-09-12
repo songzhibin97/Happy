@@ -10,9 +10,9 @@ import "time"
 
 // CreatePost:创建帖子的一些字段
 type CreatePost struct {
-	CommunityID int64  `json:"community_id" binding:"required"`
-	Title       string `json:"title" binding:"required"`
-	Content     string `json:"content,omitempty"`
+	CommunityID int64  `json:"community_id" binding:"required"` // 社区ID*
+	Title       string `json:"title" binding:"required"`        // 标题*
+	Content     string `json:"content,omitempty"`               // 内容
 }
 
 // Post:关于帖子的一些字段

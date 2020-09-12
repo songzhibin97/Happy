@@ -60,7 +60,7 @@ func (VerificationJWTResponse_StateOption) EnumDescriptor() ([]byte, []int) {
 
 // =================== (中间件验证是否有效) ====================
 type VerificationJWTRequest struct {
-	Access               string   `protobuf:"bytes,1,opt,name=Access,proto3" json:"Access,omitempty" validate:"required"`
+	Access               string   `protobuf:"bytes,1,opt,name=Access,proto3" json:"Access,omitempty" validate:"required"` // JWT*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -99,8 +99,8 @@ func (m *VerificationJWTRequest) GetAccess() string {
 }
 
 type VerificationJWTResponse struct {
-	State                VerificationJWTResponse_StateOption `protobuf:"varint,1,opt,name=State,proto3,enum=pbJwt.VerificationJWTResponse_StateOption" json:"State,omitempty"`
-	Uid                  int64                               `protobuf:"varint,2,opt,name=Uid,proto3" json:"Uid,omitempty"`
+	State                VerificationJWTResponse_StateOption `protobuf:"varint,1,opt,name=State,proto3,enum=pbJwt.VerificationJWTResponse_StateOption" json:"State,omitempty"` // 状态
+	Uid                  int64                               `protobuf:"varint,2,opt,name=Uid,proto3" json:"Uid,omitempty"`                                                    // 用户ID
 	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
 	XXX_unrecognized     []byte                              `json:"-"`
 	XXX_sizecache        int32                               `json:"-"`
@@ -146,8 +146,8 @@ func (m *VerificationJWTResponse) GetUid() int64 {
 }
 
 type VerificationRefreshJWTRequest struct {
-	Access               string   `protobuf:"bytes,1,opt,name=Access,proto3" json:"Access,omitempty" validate:"required"`
-	Refresh              string   `protobuf:"bytes,2,opt,name=Refresh,proto3" json:"Refresh,omitempty" validate:"required"`
+	Access               string   `protobuf:"bytes,1,opt,name=Access,proto3" json:"Access,omitempty" validate:"required"`   // 动态JWT*
+	Refresh              string   `protobuf:"bytes,2,opt,name=Refresh,proto3" json:"Refresh,omitempty" validate:"required"` // 静态JWT*
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -194,9 +194,9 @@ func (m *VerificationRefreshJWTRequest) GetRefresh() string {
 
 type Response struct {
 	// 响应
-	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
-	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Code                 int32             `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`                                                                                        // 业务响应状态码
+	Msg                  string            `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`                                                                                           // 提示信息
+	Data                 map[string]string `protobuf:"bytes,3,rep,name=Data,proto3" json:"Data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // 数据
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`

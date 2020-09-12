@@ -58,10 +58,10 @@ func TestPost_PostList(t *testing.T) {
 		fmt.Println("err", err)
 	}
 	// auth
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NTI3Mjc5LCJpYXQiOjE1OTg1MjM2NzksImlzcyI6IkhhcHB5In0.vWNYyVzJn6pnbIRsBXydFtOBBwn0-jmtcOKvmr2XVhg")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4Njc0MjUwLCJpYXQiOjE1OTg2NzA2NTAsImlzcyI6IkhhcHB5In0.SjOVYNNWXmgHKGARmZF9w4_mO55hdODkVkH0J18D-j4")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.PostList(ctx, &pb.GetPostListRequest{
-		Model: 1,
+		Model: 2,
 		ID:    &pb.GetPostListRequest_AuthorID{AuthorID: 91234500608},
 		Page:  1,
 		Max:   3,
