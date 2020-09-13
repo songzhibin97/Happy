@@ -3,11 +3,16 @@ package pbVote;
 
 // ======== Vote投票相关接口 =======
 
-
-
-
-
-
+// 投票
+message VoteRequest {
+  int64 PostID = 1; // 帖子ID // tag:validate:"required"
+  enum State {// 在程序里做 -1 的操作
+    Unlike = 0;
+    Cancel = 1;
+    Like = 2;
+  }
+  State Mode = 2; // 模式 // tag:validate:"required,oneof=0,1,2"
+}
 
 
 
@@ -17,4 +22,9 @@ message Response {
   int32 Code = 1 ; // 是否注册成功 返回状态码状态码
   string Msg = 2; // 异常提示
   map<string, string> Data = 3; // 携带信息
+}
+
+// 服务注册
+service Vote{
+  rpc Vote (VoteRequest) returns (Response) {}
 }

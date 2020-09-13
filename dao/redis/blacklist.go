@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	Blacklist = "Happy:Blacklist:"
 	// TimeOut引用jwt的Timeout
 	BlacklistTimeOut = jwt.RefreshDuration
 )
@@ -19,11 +18,11 @@ const (
 
 // SetBlacklist:加入黑名单
 func SetBlacklist(uid int64) {
-	StrAdd(rdb, Blacklist, strconv.FormatInt(uid, 10), strconv.FormatInt(uid, 10), BlacklistTimeOut)
+	StrAdd(rdb, KeyBlacklistPF, strconv.FormatInt(uid, 10), strconv.FormatInt(uid, 10), BlacklistTimeOut)
 
 }
 
 // GetBlacklist:查询是否在黑名单中
 func GetBlacklist(uid int64) bool {
-	return IsStr(rdb, Blacklist, strconv.FormatInt(uid, 10))
+	return IsStr(rdb, KeyBlacklistPF, strconv.FormatInt(uid, 10))
 }
