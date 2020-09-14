@@ -41,7 +41,7 @@ func TestUserServer_Register(t *testing.T) {
 	c := pb.NewUserClient(conn)
 	// 调用服务
 	// c.Greet() .proto 生成go文件的服务方法
-	r, err := c.Register(context.TODO(), &pb.RegisterRequest{UserName: "Test2", Password: "123456", ConfirmPassword: "123456", Email: "718428482@qq.com", VerificationCode: "W5BCS9qt"})
+	r, err := c.Register(context.TODO(), &pb.RegisterRequest{UserName: "Test3", Password: "123456", ConfirmPassword: "123456", Email: "718428482@qq.com", VerificationCode: "ZLD3SlK4"})
 	if err != nil {
 		fmt.Println("err", err)
 		return
@@ -67,7 +67,7 @@ func TestUserServer_Login(t *testing.T) {
 	//// auth
 	//md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDEyMjE5LCJpYXQiOjE1OTg0MTE2MTksImlzcyI6IkhhcHB5In0.xS__TWRRvXX-HKZasL0g2kVGfZ73sAx3k7y6YAJwt-I")
 	//ctx := metadata.NewOutgoingContext(context.Background(), md)
-	r, err := c.Login(context.TODO(), &pb.LoginRequest{UserName: "Test1", Password: "123456"})
+	r, err := c.Login(context.TODO(), &pb.LoginRequest{UserName: "Test2", Password: "123456"})
 	if err != nil {
 		fmt.Println("err", err)
 		return

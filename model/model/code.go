@@ -37,6 +37,9 @@ const (
 	CodeGetListError
 
 	CodePostError
+
+	CodeRepeatVoting
+	CodeAuthNoVote
 )
 
 // ResMsg:对应Code返回的Msg
@@ -62,6 +65,9 @@ var ResMsg = map[ResCode]string{
 	CodeGetListError:            "获取列表失败",
 
 	CodePostError: "发帖失败",
+
+	CodeRepeatVoting: "重复投票",
+	CodeAuthNoVote:   "作者不能投票",
 }
 
 // Msg:从Map获取Msg

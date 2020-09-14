@@ -5,6 +5,7 @@
 package gcontroller
 
 import (
+	"Happy/dao/redis"
 	sqls "Happy/dao/sql"
 	"Happy/middleware"
 	"Happy/model/gmodel"
@@ -45,7 +46,7 @@ func (p Post) PostList(ctx context.Context, request *pbPost.GetPostListRequest) 
 		if err == sql.ErrNoRows {
 			return (*pbPost.Response)(gmodel.ResponseError(model.CodeGetListEmpty)), nil
 		}
-		zap.L().Error("sqls.GetPostList Error", zap.Error(err))
+		zap.L().Error("sql.GetPostList Error", zap.Error(err))
 		return (*pbPost.Response)(gmodel.ResponseError(model.CodeServerBusy)), nil
 	}
 	jaPost, err := json.Marshal(postList)
@@ -81,6 +82,8 @@ func (p Post) CreatePost(ctx context.Context, request *pbPost.CreatePostRequest)
 		zap.L().Error("sqls.CreatePost Error", zap.Error(err))
 		return (*pbPost.Response)(gmodel.ResponseError(model.CodePostError)), nil
 	}
+	// 新增:成功创建post后建立对应redis对列
+	redis.CreatePost(int64(postId), uid)
 	// 成功 返回postId
 	return (*pbPost.Response)(gmodel.ResponseSuccess(map[string]string{"post_id": strconv.FormatUint(postId, 10)})), nil
 }

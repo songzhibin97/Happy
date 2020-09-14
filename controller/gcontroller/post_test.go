@@ -28,14 +28,14 @@ func TestPost_CreatePost(t *testing.T) {
 		fmt.Println("err", err)
 	}
 	// auth
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NTIyNTQxLCJpYXQiOjE1OTg1MjE5NDEsImlzcyI6IkhhcHB5In0.ikmeqTZE9VZ9qT3p2ldtvz9Vceufs3E3tyMV8V8qzJw")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMTMxNjM1MTM4NTYsImV4cCI6MTYwMDA3NTczMiwiaWF0IjoxNjAwMDcyMTMyLCJpc3MiOiJIYXBweSJ9._w_YWxhGMev6zGAV7-tOZmTAlzZKDcHNpOTd_rn1wOA")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	//md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDk4NzQ4LCJpYXQiOjE1OTg0OTgxNDgsImlzcyI6IkhhcHB5In0.4tgI8CEaLrO85Ec51kuSvG4wb9d6dfiroaZifxjaeEI")
 	//ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.CreatePost(ctx, &pb.CreatePostRequest{
-		CommunityID: 2,
-		Title:       "test244",
-		Content:     "contentTest244",
+		CommunityID: 1,
+		Title:       "Test1",
+		Content:     "Test1111111",
 	})
 	if err != nil {
 		fmt.Println(err)
@@ -58,10 +58,10 @@ func TestPost_PostList(t *testing.T) {
 		fmt.Println("err", err)
 	}
 	// auth
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4Njc0MjUwLCJpYXQiOjE1OTg2NzA2NTAsImlzcyI6IkhhcHB5In0.SjOVYNNWXmgHKGARmZF9w4_mO55hdODkVkH0J18D-j4")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNjAwMDUzNzMyLCJpYXQiOjE2MDAwNTAxMzIsImlzcyI6IkhhcHB5In0.M1tQvcF1LZc85wCFMXh-cXdPdy4J6csrXgkXozvsBJk")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.PostList(ctx, &pb.GetPostListRequest{
-		Model: 2,
+		Model: 1,
 		ID:    &pb.GetPostListRequest_AuthorID{AuthorID: 91234500608},
 		Page:  1,
 		Max:   3,
@@ -87,10 +87,10 @@ func TestPost_GetPostDetail(t *testing.T) {
 		fmt.Println("err", err)
 	}
 	// auth
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NTI3Mjc5LCJpYXQiOjE1OTg1MjM2NzksImlzcyI6IkhhcHB5In0.vWNYyVzJn6pnbIRsBXydFtOBBwn0-jmtcOKvmr2XVhg")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMTMxNjM1MTM4NTYsImV4cCI6MTYwMDA3NTczMiwiaWF0IjoxNjAwMDcyMTMyLCJpc3MiOiJIYXBweSJ9._w_YWxhGMev6zGAV7-tOZmTAlzZKDcHNpOTd_rn1wOA")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.GetPostDetail(ctx, &pb.GetPostDetailRequest{
-		PostID: 248269242368,
+		PostID: 4448263520387073,
 	})
 	if err != nil {
 		fmt.Println(err)

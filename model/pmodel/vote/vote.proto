@@ -14,8 +14,6 @@ message VoteRequest {
   State Mode = 2; // 模式 // tag:validate:"required,oneof=0,1,2"
 }
 
-
-
 // ======== Response ========
 message Response {
   // 响应

@@ -332,6 +332,57 @@ var doc = `{
                 }
             }
         },
+        "/Vote": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用于用户投票接口 内部调用grpc接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "投票相关"
+                ],
+                "summary": "用户投票接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "example": "0",
+                        "description": "投票 反对 取消 赞成",
+                        "name": "direction",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "0",
+                        "description": "帖子id",
+                        "name": "post_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseStruct"
+                        }
+                    }
+                }
+            }
+        },
         "/communityDetail": {
             "post": {
                 "security": [

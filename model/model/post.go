@@ -24,6 +24,7 @@ type Post struct {
 	Title       string    `json:"title" db:"title" binding:"required"`
 	Content     string    `json:"content" db:"content"`
 	CreateTime  time.Time `json:"create_time" db:"create_time"`
+	*Votes
 }
 
 // PostDetail:帖子详情

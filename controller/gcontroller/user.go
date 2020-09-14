@@ -5,7 +5,6 @@
 package gcontroller
 
 import (
-	"Happy/controller/controller"
 	"Happy/dao/redis"
 	sqls "Happy/dao/sql"
 	"Happy/middleware"
@@ -114,7 +113,7 @@ func (s *UserServer) Login(ctx context.Context, request *pbUser.LoginRequest) (*
 	}
 }
 
-// VerificationCode:获取验证码
+// Verification:获取验证码
 func (s *UserServer) Verification(ctx context.Context, request *pbUser.VerificationRequest) (*pbUser.Response, error) {
 	// 校验请求参数
 	res, err := _verification(request)
@@ -135,23 +134,4 @@ func (s *UserServer) Verification(ctx context.Context, request *pbUser.Verificat
 	// 写入验证码
 	redis.SetCurrentLimit(request.Email, code)
 	return gmodel.ResponseSuccess(map[string]string{"success": "ok"}), nil
-}
-
-// verification
-func _verification(request interface{}) (*pbUser.Response, error) {
-	// 校验请求参数
-	validate := controller.GetOtherValidator()
-	err := validate.Struct(request)
-	if err != nil {
-		// 判断错误是否是校验失败
-		errs, ok := controller.IsVerifyError(err)
-		if !ok {
-			// 如果不是校验失败的错误就返回异常
-			zap.L().Error("IsVerifyError", zap.Error(err))
-			return gmodel.ResponseWithMsg(model.CodeServerBusy, err), err
-		}
-		zap.L().Info("VerifyError", zap.Any("error", errs))
-		return gmodel.ResponseWithMsg(model.CodeServerBusy, errs), err
-	}
-	return nil, nil
 }

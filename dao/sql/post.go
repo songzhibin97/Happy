@@ -5,6 +5,7 @@
 package sql
 
 import (
+	"Happy/dao/redis"
 	"Happy/model/model"
 	"go.uber.org/zap"
 )
@@ -24,7 +25,12 @@ func GetPostDetail(postId int64) (*model.Post, error) {
 	sqlString := `SELECT post_id,title,content,author_id,community_id,create_time FROM post WHERE post_id = ?`
 	p := new(model.Post)
 	err := SearchRow(dbInstantiate, sqlString, p, postId)
-	return p, err
+	if err != nil {
+		return p, err
+	}
+	// todo 有可能会报错
+	AnalyzeVoting(p)
+	return p, nil
 }
 
 // GetApiPostDetail:获取详细信息(关于社区等信息进行拼接)
@@ -70,5 +76,29 @@ func GetPostListToCid(cid int64, page, max int64) ([]*model.Post, error) {
 func GetPostList(id int64, sqlString string, page, max int64) ([]*model.Post, error) {
 	pList := new([]*model.Post)
 	err := SearchAll(dbInstantiate, sqlString, pList, id, (page-1)*max, max)
+	// 新增一步处理流程 如果有错误不进行处理 如果没错误增加投票信息
+	if err != nil {
+		return *pList, err
+	}
+	for _, v := range *pList {
+		AnalyzeVoting(v)
+	}
 	return *pList, err
+}
+
+// AnalyzeVoting:封装 获取投票数
+func AnalyzeVoting(post *model.Post) *model.Post {
+	if post.Votes == nil {
+		post.Votes = new(model.Votes)
+	}
+	// 获取接口
+	res, ok := redis.GetPostXY(post.ID)
+	if !ok {
+		post.Like = 0
+		post.Unlike = 0
+		return post
+	}
+	post.Like = res[0]
+	post.Unlike = res[1]
+	return post
 }

@@ -216,6 +216,39 @@ paths:
       summary: 发送验证码
       tags:
       - 用户相关
+  /Vote:
+    post:
+      consumes:
+      - application/json
+      description: 用于用户投票接口 内部调用grpc接口
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: 投票 反对 取消 赞成
+        example: "0"
+        in: query
+        name: direction
+        type: string
+      - description: 帖子id
+        example: "0"
+        in: query
+        name: post_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户投票接口
+      tags:
+      - 投票相关
   /communityDetail:
     post:
       consumes:

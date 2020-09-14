@@ -29,6 +29,7 @@ const (
 	KeyPostHashT = "T"
 	KeyPostHashX = "X"
 	KeyPostHashY = "Y"
+	KeyPostAuth  = "PostAuth"
 
 	// KeyPostScore 帖子及投票分数
 	KeyPostScore = "Post:Score" // ZSet

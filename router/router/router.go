@@ -124,13 +124,13 @@ func internalAdd() {
 		OptionsWares.AddNoAuthenticationRequire(Refresh)
 	}
 	if settings.GetString("App.Mode") == "dev" {
-		OptionsWares.AddAuthenticationRequire(Swagger)
+		OptionsWares.AddNoAuthenticationRequire(Swagger)
 	}
 }
 
 // OtherApp:其他加入
 func OtherApp() {
-	OptionsWares.AddAuthenticationRequire(Ping, Community, Post)
+	OptionsWares.AddAuthenticationRequire(Ping, Community, Post, Vote)
 }
 
 // =========== function ==========
@@ -182,6 +182,11 @@ func Post(e *gin.RouterGroup) {
 	e.GET("PostList", controller.PostList)
 	e.GET("GetPostDetail", controller.GetPostDetail)
 	e.POST("CreatePost", controller.CreatePost)
+}
+
+// Vote:投票相关
+func Vote(e *gin.RouterGroup) {
+	e.POST("vote", controller.Vote)
 }
 
 // Swagger:接口相关

@@ -51,7 +51,16 @@ func Close() {
 	_ = rdb.Close()
 }
 
+// 封装Redis通用函数
+
 // 封装Redis操作String操作的一些方法
+func ExistsKey(db *redis.Client, flag, key string) bool {
+	v, err := db.Exists(PartSplice(Partial(flag), key)).Result()
+	if err != nil {
+		return false
+	}
+	return v == 1
+}
 
 // StrAdd:插入set集合
 // flag:标志用于区分不同Str集合数据
@@ -96,6 +105,26 @@ func HashMAddSplice(db *redis.Client, key string, splice string, objs map[string
 	db.HMSet(PartSplice(Partial(key), splice), objs)
 }
 
+// HashGet:map查找
+func HashGet(db *redis.Client, key string, splice string, field string) interface{} {
+	v, err := db.HGet(PartSplice(Partial(key), splice), field).Result()
+	if err != nil {
+		zap.L().Error("HashMGet", zap.String("key", PartSplice(Partial(key), splice)), zap.Error(err))
+		return nil
+	}
+	return v
+}
+
+// HashMGet:map批量查找
+func HashMGet(db *redis.Client, key string, splice string, field ...string) []interface{} {
+	v, err := db.HMGet(PartSplice(Partial(key), splice), field...).Result()
+	if err != nil {
+		zap.L().Error("HashMGet", zap.String("key", PartSplice(Partial(key), splice)), zap.Error(err))
+		return nil
+	}
+	return v
+}
+
 // HashIsExists:判断是否存在 存在为true
 func HashIsExists(db *redis.Client, key string, splice string, field string) bool {
 	v, err := db.HExists(PartSplice(Partial(key), splice), field).Result()
@@ -138,7 +167,7 @@ func ZSetAddSplice(db *redis.Client, flag string, key string, objs ...redis.Z) {
 	db.ZAdd(PartSplice(Partial(flag), key), objs...)
 }
 
-// IsStr:判断key是否在redis中
+// IsZSet:判断key是否在redis中
 func IsZSet(db *redis.Client, flag string, key string, member string) bool {
 	res, err := db.ZRank(PartSplice(Partial(flag), key), member).Result()
 	if err != nil {
@@ -147,8 +176,29 @@ func IsZSet(db *redis.Client, flag string, key string, member string) bool {
 	return res >= 0
 }
 
+// GetZSetV: 查看是否存在V值
+func GetZSetV(db *redis.Client, flag string, key string, member string) (int, bool) {
+	res, err := db.ZScore(PartSplice(Partial(flag), key), member).Result()
+	if err != nil {
+		return -1, false
+	}
+	return int(res), true
+}
+
 // ZSetChangeV:修改member值
-func ZSetChangeV(db *redis.Client, flag string, key string, increment float64, member string) float64 {
+func ZSetChangeV(db *redis.Client, key string, increment float64, member string) float64 {
+	// 先删除
+	ZSetRemove(db, key, member)
+	// 在增加
+	ZSetAdd(db, key, redis.Z{
+		Score:  increment,
+		Member: member,
+	})
+	return increment
+}
+
+// ZSetChangeVSplit:修改member值
+func ZSetChangeVSplit(db *redis.Client, flag string, key string, increment float64, member string) float64 {
 	res, err := db.ZIncrBy(PartSplice(Partial(flag), key), increment, member).Result()
 	if err != nil {
 		zap.L().Error("ZSetChangeV:", zap.String("key", key), zap.Error(err))
@@ -157,7 +207,12 @@ func ZSetChangeV(db *redis.Client, flag string, key string, increment float64, m
 	return res
 }
 
-// ZSetRemove:删除member值
-func ZSetRemove(db *redis.Client, flag string, key string, member string) {
+// ZSetRemoveSplit:删除member值
+func ZSetRemoveSplit(db *redis.Client, flag string, key string, member string) {
 	db.ZRem(PartSplice(Partial(flag), key), member)
+}
+
+// ZSetRemove:删除member值
+func ZSetRemove(db *redis.Client, key string, member string) {
+	db.ZRem(Partial(key), member)
 }

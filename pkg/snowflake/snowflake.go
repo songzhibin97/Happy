@@ -47,7 +47,7 @@ func GetStartTime() time.Time {
 // Init:初始化
 // startTime:起始时间,作为偏移量使用
 // machineID:获取machineID
-func init() {
+func Init() {
 	st := sonyflake.Settings{}
 	st.MachineID = GetMachineID
 	st.StartTime = GetStartTime()
@@ -58,6 +58,9 @@ func init() {
 
 // GetID
 func GetID() (uint64, error) {
+	if LSonyFlake == nil {
+		Init()
+	}
 	if LSonyFlake == nil {
 		zap.L().Error("LSonyFlake is Nil Not Exec GetID")
 		return 0, errors.New("LSonyFlake is Nil Not Exec GetID")
