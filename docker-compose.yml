@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  mysql13306:
+    image: "mysql:8.0.19"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    ports:
+      - "13306:3306"  # host物理直接映射端口为3306
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'Happy' # 初始化启动时要创建的数据库的名称
+      MYSQL_ROOT_PASSWORD: 'p@ssw0rd' # root管理员用户密码
+    volumes:
+      - "./dockerInit:/docker-entrypoint-initdb.d"
+      - "./Endurance/mysql:/var/lib/mysql"
+  redis16379:
+    image: "redis"
+    restart: always
+    ports:
+      - "16379:6379"
+    volumes:
+      - "./Endurance/redis:/data"
+  happy:
+    build: .
+    restart: always
+    depends_on:
+      - mysql13306
+      - redis16379
+    ports:
+      - "8080:8080"
+      - "8082:8082"
+      - "8083:8083"

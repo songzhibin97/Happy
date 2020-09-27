@@ -20,8 +20,8 @@ import (
 // @Tags 投票相关
 // @Accept application/json
 // @Produce application/json
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Param object query model.ParamVoteDate false "获取帖子的模式"
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param object body model.ParamVoteDate true "获取帖子的模式"
 // @Security ApiKeyAuth
 // @Success 200 {object} model.ResponseStruct
 // @Router /Vote [post]

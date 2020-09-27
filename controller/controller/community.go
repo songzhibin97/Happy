@@ -20,10 +20,10 @@ import (
 // @Tags 社区相关
 // @Accept application/json
 // @Produce application/json
-// @Param Authorization header string false "Bearer 用户令牌"
+// @Param Authorization header string true "Bearer 用户令牌"
 // @Security ApiKeyAuth
 // @Success 200 {object} model.ResponseStruct
-// @Router /communityList [post]
+// @Router /communityList [get]
 func CommunityList(c *gin.Context) {
 	cc := pbCommunity.NewCommunityClient(GrpcConnAuth)
 	// 获取请求头的token
@@ -47,11 +47,11 @@ func CommunityList(c *gin.Context) {
 // @Tags 社区相关
 // @Accept application/json
 // @Produce application/json
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Param object query model.CommunityDetailRequest false "查询参数"
+// @Param Authorization header string ture "Bearer 用户令牌"
+// @Param object query model.CommunityDetailRequest ture "查询参数"
 // @Security ApiKeyAuth
 // @Success 200 {object} model.ResponseStruct
-// @Router /communityDetail [post]
+// @Router /communityDetail [get]
 func CommunityDetail(c *gin.Context) {
 	// 参数校验
 	rq := new(model.CommunityDetailRequest)

@@ -45,7 +45,7 @@ func Init() {
 // @Tags 用户相关
 // @Accept application/json
 // @Produce application/json
-// @Param object query model.RegisterForm false "注册参数"
+// @Param object body model.RegisterForm true "注册参数"
 // @Security ApiKeyAuth
 // @Success 200 {object} model.ResponseStruct
 // @Router /SignUp [post]
@@ -81,8 +81,8 @@ func SignUpHandler(c *gin.Context) {
 // @Description 用于用户登录的接口 内部调用grpc接口
 // @Tags 用户相关
 // @Accept application/json
-// @Produce application/json
-// @Param object query model.LoginGet false "登录参数"
+// @Produce multipart/form-data
+// @Param object body model.LoginGet true "登录参数"
 // @Security ApiKeyAuth
 // @Success 200 {object} model.ResponseStruct
 // @Router /Login [post]

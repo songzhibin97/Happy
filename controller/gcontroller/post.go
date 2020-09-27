@@ -22,6 +22,9 @@ import (
 // Post:帖子相关
 type Post struct{}
 
+// todo 还需要做的事情 : PostList获取帖子列表 增加flag 根据多种不同热度获取
+// todo 主要工作在redis上的优化
+
 // PostList:获取帖子列表
 func (p Post) PostList(ctx context.Context, request *pbPost.GetPostListRequest) (*pbPost.Response, error) {
 	// 1.校验参数

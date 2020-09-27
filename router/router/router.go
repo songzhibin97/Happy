@@ -173,8 +173,8 @@ func Ping(e *gin.RouterGroup) {
 
 // Community:社区相关
 func Community(e *gin.RouterGroup) {
-	e.POST("communityList", controller.CommunityList)
-	e.POST("communityDetail", controller.CommunityDetail)
+	e.GET("communityList", controller.CommunityList)
+	e.GET("communityDetail", controller.CommunityDetail)
 }
 
 // Post:帖子相关

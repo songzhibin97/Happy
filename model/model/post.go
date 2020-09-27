@@ -15,6 +15,19 @@ type CreatePost struct {
 	Content     string `json:"content,omitempty"`               // 内容
 }
 
+// ParamPost:用于Get请求解析字段
+type ParamPost struct {
+	ID   int64 `from:"id" binding:"required"`    // 对应模式的ID(社区ID/用户ID)*
+	Mode int   `from:"mode" binding:"oneof=0 1"` // 查询模式*
+	Page int   `from:"page"`                     // 对应页码*
+	Max  int   `from:"max" binding:"max=100"`    // 每页最大数量*
+}
+
+// ParamPostID:获取帖子ID
+type ParamPostID struct {
+	ID int64 `form:"id" binding:"required"` // 帖子ID*
+}
+
 // Post:关于帖子的一些字段
 type Post struct {
 	ID          int64     `json:"post_id,string" db:"post_id" binding:"required"`

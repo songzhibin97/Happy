@@ -28,7 +28,7 @@ func TestCommunityServer_CommunityList(t *testing.T) {
 		fmt.Println("err", err)
 	}
 	// auth
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDk4NzQ4LCJpYXQiOjE1OTg0OTgxNDgsImlzcyI6IkhhcHB5In0.4tgI8CEaLrO85Ec51kuSvG4wb9d6dfiroaZifxjaeEI")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMTMxNjM1MTM4NTYsImV4cCI6MTYwMDIzMTEzNCwiaWF0IjoxNjAwMjI3NTM0LCJpc3MiOiJIYXBweSJ9.LMfptXYXU8u9nMyxT-4M_YNaGMjSTs_iAie-mJ5HA0A")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.CommunityList(ctx, &pb.CommunityListRequest{})
 	if err != nil {
@@ -55,7 +55,7 @@ func TestCommunityServer_CommunityDetail(t *testing.T) {
 	//// auth
 	//md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NDEyMjE5LCJpYXQiOjE1OTg0MTE2MTksImlzcyI6IkhhcHB5In0.xS__TWRRvXX-HKZasL0g2kVGfZ73sAx3k7y6YAJwt-I")
 	//ctx := metadata.NewOutgoingContext(context.Background(), md)
-	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MTIzNDUwMDYwOCwiZXhwIjoxNTk4NTI3Mjc5LCJpYXQiOjE1OTg1MjM2NzksImlzcyI6IkhhcHB5In0.vWNYyVzJn6pnbIRsBXydFtOBBwn0-jmtcOKvmr2XVhg")
+	md := metadata.Pairs("authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMTMxNjM1MTM4NTYsImV4cCI6MTYwMDIzMTEzNCwiaWF0IjoxNjAwMjI3NTM0LCJpc3MiOiJIYXBweSJ9.LMfptXYXU8u9nMyxT-4M_YNaGMjSTs_iAie-mJ5HA0A")
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	r, err := c.CommunityDetail(ctx, &pb.CommunityDetailRequest{ID: 1})
 	if err != nil {

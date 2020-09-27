@@ -133,9 +133,10 @@ func ChangeScore(postId int64) bool {
 	if !ok {
 		return false
 	}
-	ZSetChangeV(rdb, KeyPostScore, CalculateScore(float64(obj.T), float64(obj.X), float64(obj.Y)),
+	increment := CalculateScore(float64(obj.T), float64(obj.X), float64(obj.Y))
+	f := ZSetChangeV(rdb, KeyPostScore, increment,
 		strconv.FormatInt(postId, 10))
-	return true
+	return f == increment
 }
 
 // GetUserVote:获取用户是否存在

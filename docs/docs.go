@@ -51,27 +51,17 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
-                        "in": "header"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "社区ID*",
-                        "name": "community_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "内容",
-                        "name": "content",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "标题*",
-                        "name": "title",
-                        "in": "query",
-                        "required": true
+                        "description": "创建帖子参数",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreatePost"
+                        }
                     }
                 ],
                 "responses": {
@@ -107,13 +97,15 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
-                        "in": "header"
+                        "in": "header",
+                        "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "帖子ID",
-                        "name": "ID",
-                        "in": "query"
+                        "description": "帖子ID*",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -138,7 +130,7 @@ var doc = `{
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "tags": [
                     "用户相关"
@@ -146,18 +138,13 @@ var doc = `{
                 "summary": "登录",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "密码*",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户名*",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
+                        "description": "登录参数",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginGet"
+                        }
                     }
                 ],
                 "responses": {
@@ -193,30 +180,32 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
-                        "in": "header"
+                        "in": "header",
+                        "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "获取帖子的模式",
-                        "name": "Mode",
+                        "description": "对应模式的ID(社区ID/用户ID)*",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页最大数量*",
+                        "name": "max",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "社区ID/用户ID",
-                        "name": "ID",
+                        "description": "查询模式*",
+                        "name": "mode",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "分页页码",
-                        "name": "Page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页最大数量",
-                        "name": "Max",
+                        "description": "对应页码*",
+                        "name": "page",
                         "in": "query"
                     }
                 ],
@@ -250,39 +239,13 @@ var doc = `{
                 "summary": "注册",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "re密码*",
-                        "name": "confirm_password",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "邮箱*",
-                        "name": "email",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码*",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户名*",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "验证码*",
-                        "name": "verification_code",
-                        "in": "query",
-                        "required": true
+                        "description": "注册参数",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterForm"
+                        }
                     }
                 ],
                 "responses": {
@@ -355,22 +318,17 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
-                        "in": "header"
-                    },
-                    {
-                        "type": "string",
-                        "example": "0",
-                        "description": "投票 反对 取消 赞成",
-                        "name": "direction",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "example": "0",
-                        "description": "帖子id",
-                        "name": "post_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
+                    },
+                    {
+                        "description": "获取帖子的模式",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ParamVoteDate"
+                        }
                     }
                 ],
                 "responses": {
@@ -384,7 +342,7 @@ var doc = `{
             }
         },
         "/communityDetail": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -409,8 +367,7 @@ var doc = `{
                         "in": "header"
                     },
                     {
-                        "type": "string",
-                        "example": "0",
+                        "type": "integer",
                         "description": "社区ID*",
                         "name": "id",
                         "in": "query",
@@ -428,7 +385,7 @@ var doc = `{
             }
         },
         "/communityList": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -450,7 +407,8 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌",
                         "name": "Authorization",
-                        "in": "header"
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -465,6 +423,94 @@ var doc = `{
         }
     },
     "definitions": {
+        "model.CreatePost": {
+            "type": "object",
+            "required": [
+                "community_id",
+                "title"
+            ],
+            "properties": {
+                "community_id": {
+                    "description": "社区ID*",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "内容",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "标题*",
+                    "type": "string"
+                }
+            }
+        },
+        "model.LoginGet": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "description": "密码*",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名*",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ParamVoteDate": {
+            "type": "object",
+            "required": [
+                "post_id"
+            ],
+            "properties": {
+                "direction": {
+                    "description": "投票 反对 取消 赞成",
+                    "type": "string",
+                    "example": "0"
+                },
+                "post_id": {
+                    "description": "帖子id",
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "model.RegisterForm": {
+            "type": "object",
+            "required": [
+                "confirm_password",
+                "email",
+                "password",
+                "username",
+                "verification_code"
+            ],
+            "properties": {
+                "confirm_password": {
+                    "description": "re密码*",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱*",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码*",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名*",
+                    "type": "string"
+                },
+                "verification_code": {
+                    "description": "验证码*",
+                    "type": "string"
+                }
+            }
+        },
         "model.ResponseStruct": {
             "type": "object",
             "properties": {
@@ -497,7 +543,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "0.01",
-	Host:        "Gin:8080 Grpc: 8082/8083",
+	Host:        "Gin:8080",
 	BasePath:    "/",
 	Schemes:     []string{},
 	Title:       "Happy",

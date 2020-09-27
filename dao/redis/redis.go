@@ -162,6 +162,11 @@ func ZSetAdd(db *redis.Client, key string, objs ...redis.Z) {
 	db.ZAdd(Partial(key), objs...)
 }
 
+// ZSetPipelineAdd:新增
+func ZSetPipelineAdd(db *redis.Pipeliner, key string, objs ...redis.Z) {
+	(*db).ZAdd(Partial(key), objs...)
+}
+
 // ZSetAddSplice:新增 带参数
 func ZSetAddSplice(db *redis.Client, flag string, key string, objs ...redis.Z) {
 	db.ZAdd(PartSplice(Partial(flag), key), objs...)
@@ -187,13 +192,20 @@ func GetZSetV(db *redis.Client, flag string, key string, member string) (int, bo
 
 // ZSetChangeV:修改member值
 func ZSetChangeV(db *redis.Client, key string, increment float64, member string) float64 {
+	// 使用事务
+	pipeline := db.TxPipeline()
 	// 先删除
-	ZSetRemove(db, key, member)
+	ZSetPipelineRemove(&pipeline, key, member)
 	// 在增加
-	ZSetAdd(db, key, redis.Z{
+	ZSetPipelineAdd(&pipeline, key, redis.Z{
 		Score:  increment,
 		Member: member,
 	})
+	_, err := pipeline.Exec()
+	if err != nil {
+		return -increment
+	}
+
 	return increment
 }
 
@@ -215,4 +227,9 @@ func ZSetRemoveSplit(db *redis.Client, flag string, key string, member string) {
 // ZSetRemove:删除member值
 func ZSetRemove(db *redis.Client, key string, member string) {
 	db.ZRem(Partial(key), member)
+}
+
+// ZSetRemove:删除member值
+func ZSetPipelineRemove(db *redis.Pipeliner, key string, member string) {
+	(*db).ZRem(Partial(key), member)
 }

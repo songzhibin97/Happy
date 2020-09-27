@@ -1,5 +1,69 @@
 basePath: /
 definitions:
+  model.CreatePost:
+    properties:
+      community_id:
+        description: 社区ID*
+        type: integer
+      content:
+        description: 内容
+        type: string
+      title:
+        description: 标题*
+        type: string
+    required:
+    - community_id
+    - title
+    type: object
+  model.LoginGet:
+    properties:
+      password:
+        description: 密码*
+        type: string
+      username:
+        description: 用户名*
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.ParamVoteDate:
+    properties:
+      direction:
+        description: 投票 反对 取消 赞成
+        example: "0"
+        type: string
+      post_id:
+        description: 帖子id
+        example: "0"
+        type: string
+    required:
+    - post_id
+    type: object
+  model.RegisterForm:
+    properties:
+      confirm_password:
+        description: re密码*
+        type: string
+      email:
+        description: 邮箱*
+        type: string
+      password:
+        description: 密码*
+        type: string
+      username:
+        description: 用户名*
+        type: string
+      verification_code:
+        description: 验证码*
+        type: string
+    required:
+    - confirm_password
+    - email
+    - password
+    - username
+    - verification_code
+    type: object
   model.ResponseStruct:
     properties:
       code:
@@ -12,7 +76,7 @@ definitions:
         description: 提示信息
         type: object
     type: object
-host: 'Gin:8080 Grpc: 8082/8083'
+host: Gin:8080
 info:
   contact:
     email: 718428482@qq.com
@@ -31,21 +95,14 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
-        type: string
-      - description: 社区ID*
-        in: query
-        name: community_id
-        required: true
-        type: integer
-      - description: 内容
-        in: query
-        name: content
-        type: string
-      - description: 标题*
-        in: query
-        name: title
         required: true
         type: string
+      - description: 创建帖子参数
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePost'
       produces:
       - application/json
       responses:
@@ -67,10 +124,12 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
-      - description: 帖子ID
+      - description: 帖子ID*
         in: query
-        name: ID
+        name: id
+        required: true
         type: integer
       produces:
       - application/json
@@ -90,18 +149,14 @@ paths:
       - application/json
       description: 用于用户登录的接口 内部调用grpc接口
       parameters:
-      - description: 密码*
-        in: query
-        name: password
+      - description: 登录参数
+        in: body
+        name: object
         required: true
-        type: string
-      - description: 用户名*
-        in: query
-        name: username
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.LoginGet'
       produces:
-      - application/json
+      - multipart/form-data
       responses:
         "200":
           description: OK
@@ -121,22 +176,24 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
-      - description: 获取帖子的模式
+      - description: 对应模式的ID(社区ID/用户ID)*
         in: query
-        name: Mode
+        name: id
+        required: true
         type: integer
-      - description: 社区ID/用户ID
+      - description: 每页最大数量*
         in: query
-        name: ID
+        name: max
         type: integer
-      - description: 分页页码
+      - description: 查询模式*
         in: query
-        name: Page
+        name: mode
         type: integer
-      - description: 每页最大数量
+      - description: 对应页码*
         in: query
-        name: Max
+        name: page
         type: integer
       produces:
       - application/json
@@ -156,31 +213,12 @@ paths:
       - application/json
       description: 用于用户注册的接口 内部调用grpc接口
       parameters:
-      - description: re密码*
-        in: query
-        name: confirm_password
+      - description: 注册参数
+        in: body
+        name: object
         required: true
-        type: string
-      - description: 邮箱*
-        in: query
-        name: email
-        required: true
-        type: string
-      - description: 密码*
-        in: query
-        name: password
-        required: true
-        type: string
-      - description: 用户名*
-        in: query
-        name: username
-        required: true
-        type: string
-      - description: 验证码*
-        in: query
-        name: verification_code
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.RegisterForm'
       produces:
       - application/json
       responses:
@@ -225,18 +263,14 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
-        type: string
-      - description: 投票 反对 取消 赞成
-        example: "0"
-        in: query
-        name: direction
-        type: string
-      - description: 帖子id
-        example: "0"
-        in: query
-        name: post_id
         required: true
         type: string
+      - description: 获取帖子的模式
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/model.ParamVoteDate'
       produces:
       - application/json
       responses:
@@ -250,7 +284,7 @@ paths:
       tags:
       - 投票相关
   /communityDetail:
-    post:
+    get:
       consumes:
       - application/json
       description: 用于获取社区详情接口 内部调用grpc接口
@@ -260,11 +294,10 @@ paths:
         name: Authorization
         type: string
       - description: 社区ID*
-        example: "0"
         in: query
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -278,7 +311,7 @@ paths:
       tags:
       - 社区相关
   /communityList:
-    post:
+    get:
       consumes:
       - application/json
       description: 用于获取获取社区列表接口 内部调用grpc接口
@@ -286,6 +319,7 @@ paths:
       - description: Bearer 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
       produces:
       - application/json

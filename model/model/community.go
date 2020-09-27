@@ -14,7 +14,7 @@ type CommunityList struct {
 
 // CommunityDetailRequest:请求社区信息
 type CommunityDetailRequest struct {
-	ID int64 `json:"id,string" binding:"required"` // 社区ID*
+	ID int64 `form:"id" binding:"required"` // 社区ID*
 }
 
 // CommunityDetail:用于返回社区详情

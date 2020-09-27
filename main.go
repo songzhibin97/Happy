@@ -46,7 +46,8 @@ import (
 // @contact.name SongZhiBin
 // @contact.email 718428482@qq.com
 
-// @host Gin:8080 Grpc: 8082/8083
+// @host Gin:8080
+// @GrpcHost: 8082/8083
 // @BasePath /
 func main() {
 	// 1.加载配置

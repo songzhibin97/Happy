@@ -80,6 +80,7 @@ func GetPostList(id int64, sqlString string, page, max int64) ([]*model.Post, er
 	if err != nil {
 		return *pList, err
 	}
+	// todo 存在可优化区间 使用redis pipeline 减少 RTT(网络连接次数)
 	for _, v := range *pList {
 		AnalyzeVoting(v)
 	}
