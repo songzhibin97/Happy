@@ -1,15 +1,12 @@
-/******
-** @创建时间 : 2020/8/20 10:16
-** @作者 : SongZhiBin
-******/
 package email
 
 import (
 	"Happy/settings"
 	"bytes"
 	"fmt"
-	"go.uber.org/zap"
 	"html/template"
+
+	"go.uber.org/zap"
 )
 
 // 邮件MessageTemp

@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/11 20:49
-** @作者 : SongZhiBin
-******/
 package router
 
 import (
@@ -12,6 +8,7 @@ import (
 	"Happy/model/model"
 	"Happy/pkg/websocket"
 	"Happy/settings"
+
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	gs "github.com/swaggo/gin-swagger"

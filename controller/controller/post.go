@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/27 18:59
-** @作者 : SongZhiBin
-******/
 package controller
 
 import (
@@ -9,9 +5,10 @@ import (
 	"Happy/model/model"
 	pbPost "Happy/model/pmodel/post"
 	pb "Happy/model/pmodel/user"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 // 帖子相关

@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/8/20 20:21
-** @作者 : SongZhiBin
-******/
 package controller
 
 import (
 	"Happy/model/gmodel"
 	"Happy/model/model"
 	pbUser "Happy/model/pmodel/user"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 // 存放一些公用api

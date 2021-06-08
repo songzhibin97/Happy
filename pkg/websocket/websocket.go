@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/8/19 13:41
-** @作者 : SongZhiBin
-******/
 package websocket
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"net/http"
-	"strconv"
 )
 
 //  ClientManager:

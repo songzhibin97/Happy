@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/8/27 17:36
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
 	pb "Happy/model/pmodel/post"
 	"context"
 	"fmt"
+	"testing"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"testing"
 )
 
 func TestPost_CreatePost(t *testing.T) {

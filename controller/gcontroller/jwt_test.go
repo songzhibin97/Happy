@@ -1,15 +1,12 @@
-/******
-** @创建时间 : 2020/8/23 13:18
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
 	pb "Happy/model/pmodel/jwt"
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
 	"testing"
+
+	"google.golang.org/grpc"
 )
 
 func TestJwtServer_VerificationRefreshJWT(t *testing.T) {

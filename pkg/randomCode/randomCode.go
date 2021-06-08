@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/20 13:06
-** @作者 : SongZhiBin
-******/
 package randomCode
 
 import (

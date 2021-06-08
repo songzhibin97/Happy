@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/26 20:21
-** @作者 : SongZhiBin
-******/
 package controller
 
 import (
@@ -9,9 +5,10 @@ import (
 	"Happy/model/model"
 	pbCommunity "Happy/model/pmodel/community"
 	pb "Happy/model/pmodel/user"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 // CommunityList:获取社区列表

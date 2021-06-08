@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/26 20:28
-** @作者 : SongZhiBin
-******/
 package model
 
 import "time"

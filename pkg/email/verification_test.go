@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/20 10:34
-** @作者 : SongZhiBin
-******/
 package email
 
 import "testing"

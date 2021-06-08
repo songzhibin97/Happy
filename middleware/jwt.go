@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/17 16:45
-** @作者 : SongZhiBin
-******/
 package middleware
 
 import (
@@ -10,9 +6,10 @@ import (
 	"Happy/model/model"
 	pbJwt "Happy/model/pmodel/jwt"
 	pbUser "Happy/model/pmodel/user"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 // 关于jwt的中间件

@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/26 20:21
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
@@ -12,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+
 	"go.uber.org/zap"
 )
 

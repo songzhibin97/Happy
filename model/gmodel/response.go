@@ -1,13 +1,10 @@
-/******
-** @创建时间 : 2020/8/22 10:19
-** @作者 : SongZhiBin
-******/
 package gmodel
 
 import (
 	"Happy/model/model"
 	pb "Happy/model/pmodel/user"
 	"encoding/json"
+
 	"go.uber.org/zap"
 )
 

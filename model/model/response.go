@@ -1,12 +1,9 @@
-/******
-** @创建时间 : 2020/8/16 10:34
-** @作者 : SongZhiBin
-******/
 package model
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Response 定义响应内容

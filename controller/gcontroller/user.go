@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/22 09:35
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
@@ -17,6 +13,7 @@ import (
 	"Happy/settings"
 	"context"
 	"database/sql"
+
 	"go.uber.org/zap"
 )
 

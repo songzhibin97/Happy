@@ -1,15 +1,12 @@
-/******
-** @创建时间 : 2020/8/15 16:47
-** @作者 : SongZhiBin
-******/
 package snowflake
 
 import (
 	"Happy/settings"
 	"errors"
+	"time"
+
 	"github.com/sony/sonyflake"
 	"go.uber.org/zap"
-	"time"
 )
 
 // 第三方包:分布式全局ID生成
