@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/8/11 20:38
-** @作者 : SongZhiBin
-******/
 package redis
 
 import (
 	"Happy/settings"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
-	"time"
 )
 
 // rdb:redis全局变量

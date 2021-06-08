@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/26 10:41
-** @作者 : SongZhiBin
-******/
 package middleware
 
 import (
@@ -10,6 +6,7 @@ import (
 	"Happy/pkg/jwt"
 	"Happy/settings"
 	"context"
+
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"go.uber.org/zap"
 )

@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/19 14:01
-** @作者 : SongZhiBin
-******/
 package websocket
 
 import "github.com/gorilla/websocket"

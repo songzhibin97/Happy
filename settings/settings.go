@@ -1,14 +1,11 @@
-/******
-** @创建时间 : 2020/8/11 17:28
-** @作者 : SongZhiBin
-******/
 package settings
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"time"
 )
 
 // Init:Viper配置文件初始化

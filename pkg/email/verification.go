@@ -1,12 +1,9 @@
-/******
-** @创建时间 : 2020/8/20 09:05
-** @作者 : SongZhiBin
-******/
 package email
 
 import (
-	"go.uber.org/zap"
 	"net/smtp"
+
+	"go.uber.org/zap"
 )
 
 // 关于验证码的第三方插件

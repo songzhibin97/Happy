@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/20 17:11
-** @作者 : SongZhiBin
-******/
 package redis
 
 import "time"

@@ -1,16 +1,8 @@
-/******
-** @创建时间 : 2020/8/11 17:44
-** @作者 : SongZhiBin
-******/
 package logger
 
 import (
 	"Happy/settings"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/natefinch/lumberjack"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -18,6 +10,11 @@ import (
 	"runtime/debug"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/natefinch/lumberjack"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var t *time.Timer

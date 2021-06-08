@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/16 10:57
-** @作者 : SongZhiBin
-******/
 package model
 
 import "errors"

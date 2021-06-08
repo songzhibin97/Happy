@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/15 22:36
-** @作者 : SongZhiBin
-******/
 package controller
 
 import (
@@ -9,11 +5,12 @@ import (
 	"Happy/model/model"
 	pbUser "Happy/model/pmodel/user"
 	"Happy/settings"
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"net/http"
-	"strconv"
 )
 
 // 用户相关

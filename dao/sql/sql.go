@@ -1,17 +1,14 @@
-/******
-** @创建时间 : 2020/8/11 19:48
-** @作者 : SongZhiBin
-******/
 package sql
 
 import (
 	"Happy/settings"
 	"fmt"
+	"strings"
+
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
-	"strings"
 )
 
 // 这里使用sqlx进行链接

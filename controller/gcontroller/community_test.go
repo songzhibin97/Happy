@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/8/26 21:17
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
 	pb "Happy/model/pmodel/community"
 	"context"
 	"fmt"
+	"testing"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"testing"
 )
 
 func TestCommunityServer_CommunityList(t *testing.T) {

@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/9/13 10:33
-** @作者 : SongZhiBin
-******/
 package redis
 
 import (
 	"Happy/model/model"
 	"Happy/pkg/snowflake"
-	"github.com/go-redis/redis"
 	"math"
 	"strconv"
 	"time"
+
+	"github.com/go-redis/redis"
 )
 
 /*

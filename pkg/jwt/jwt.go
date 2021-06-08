@@ -1,13 +1,10 @@
-/******
-** @创建时间 : 2020/8/17 12:00
-** @作者 : SongZhiBin
-******/
 package jwt
 
 import (
 	"Happy/model/model"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 const (

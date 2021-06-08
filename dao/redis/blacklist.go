@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/17 21:50
-** @作者 : SongZhiBin
-******/
 package redis
 
 import (

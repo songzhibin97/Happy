@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/8/16 09:36
-** @作者 : SongZhiBin
-******/
 package controller
 
 import (
@@ -10,6 +6,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
@@ -20,9 +20,6 @@ import (
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/metadata"
-	"reflect"
-	"strconv"
-	"strings"
 )
 
 // 存放一些共用的工具

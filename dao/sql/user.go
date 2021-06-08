@@ -1,12 +1,9 @@
-/******
-** @创建时间 : 2020/8/16 14:49
-** @作者 : SongZhiBin
-******/
 package sql
 
 import (
 	"Happy/model/model"
 	"Happy/pkg/snowflake"
+
 	"go.uber.org/zap"
 )
 

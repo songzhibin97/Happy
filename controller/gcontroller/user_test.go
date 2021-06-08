@@ -1,15 +1,12 @@
-/******
-** @创建时间 : 2020/8/22 13:38
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
 	pb "Happy/model/pmodel/user"
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
 	"testing"
+
+	"google.golang.org/grpc"
 )
 
 // Token token认证

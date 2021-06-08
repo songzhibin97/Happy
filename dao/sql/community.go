@@ -1,11 +1,8 @@
-/******
-** @创建时间 : 2020/8/26 20:50
-** @作者 : SongZhiBin
-******/
 package sql
 
 import (
 	"Happy/model/model"
+
 	"go.uber.org/zap"
 )
 

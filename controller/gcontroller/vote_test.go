@@ -1,16 +1,13 @@
-/******
-** @创建时间 : 2020/9/14 15:06
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
 	pb "Happy/model/pmodel/vote"
 	"context"
 	"fmt"
+	"testing"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"testing"
 )
 
 func TestVote_Vote(t *testing.T) {

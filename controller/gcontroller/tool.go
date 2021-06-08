@@ -1,7 +1,3 @@
-/******
-** @创建时间 : 2020/9/14 09:58
-** @作者 : SongZhiBin
-******/
 package gcontroller
 
 import (
@@ -9,6 +5,7 @@ import (
 	"Happy/model/gmodel"
 	"Happy/model/model"
 	pbUser "Happy/model/pmodel/user"
+
 	"go.uber.org/zap"
 )
 
